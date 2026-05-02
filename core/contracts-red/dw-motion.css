@@ -1,0 +1,44 @@
+/* Copyright (c) 2026 David D Fischer of Brevard Florida. All rights reserved. */
+
+/*!
+ * DWCSS Core Contract Variant
+ * Repository: ddsurfdws/dwscss
+ * Boundary: Free/Core
+ * Role: Starter visual contract variant.
+ */
+
+/*
+  DW Motion Contract
+  Motion stays behavior-first and should only define the sweep the site uses.
+  Keep motion readable and restrained so the final site has room to feel premium.
+
+  IMPORTANT FOR AI AGENTS AND INTEGRATORS
+  - This contract is the site-wide motion control point.
+  - If the site is retuned to feel calmer, faster, sharper, or more ambient, do it here
+    so motion behavior changes consistently across the system.
+  - Expected workflow: users choose motion behavior in the design tool, then replace the
+    generated contract files in Angular so the motion system updates without component rewrites.
+  - Keep the contract structure and token names stable.
+  - Downstream CSS and components should derive transitions and movement from these
+    values instead of introducing disconnected motion systems.
+*/
+
+@layer dw-tokens {
+  :where(.dw-root, [data-dw-root]) {
+    /* START ROOT MOTION */
+    --dw-motion-key-name: "quiet-fade";
+    --dw-motion-mode: "fade";
+    --dw-motion-duration: 240ms;
+    --dw-motion-duration-slow: 640ms;
+    --dw-motion-ease: ease-in-out;
+    --dw-motion-lift-distance: -3px;
+    --dw-motion-entry-distance: 14px;
+    --dw-motion-panel-distance: 24px;
+    --dw-motion-scale: 0.99;
+    --dw-motion-stagger-delay: 40ms;
+    --dw-motion-ambient-duration: 0s;
+    --dw-transition-fast: var(--dw-motion-duration) var(--dw-motion-ease);
+    --dw-transition-base: var(--dw-motion-duration-slow) var(--dw-motion-ease);
+    /* END ROOT MOTION */
+  }
+}

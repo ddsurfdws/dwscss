@@ -1,0 +1,107 @@
+/*
+  DW Layout Extensions
+  Add-only layout patterns built on the frozen DW token system.
+*/
+
+@layer dw-components {
+  :where(.dw-app-shell) {
+    display: grid;
+    gap: var(--dw-space-5, 1.5rem);
+    align-items: start;
+  }
+
+  :where(.dw-app-shell > *) {
+    min-width: 0;
+  }
+
+  :where(.dw-app-sidebar, .dw-app-main, .dw-app-rail) {
+    display: grid;
+    gap: var(--dw-space-4, 1rem);
+    align-content: start;
+  }
+
+  :where(.dw-app-sidebar, .dw-app-rail) {
+    padding: var(--dw-space-4, 1rem);
+    background: var(--dw-color-surface);
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-3, 0.75rem);
+    box-shadow: var(--dw-shadow-1);
+  }
+
+  :where(.dw-toolbar) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--dw-space-3, 0.75rem);
+    padding: var(--dw-space-4, 1rem);
+    background: var(--dw-color-surface-2);
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-3, 0.75rem);
+  }
+
+  :where(.dw-toolbar-group) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--dw-space-3, 0.75rem);
+  }
+
+  :where(.dw-section-header) {
+    display: grid;
+    gap: var(--dw-space-2, 0.5rem);
+    margin-bottom: var(--dw-space-5, 1.5rem);
+  }
+
+  :where(.dw-section-kicker) {
+    color: var(--dw-color-text-muted);
+    font-size: var(--dw-text-1, 0.875rem);
+    font-weight: var(--dw-weight-semibold, 600);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  :where(.dw-content-stack) {
+    display: grid;
+    gap: var(--dw-space-5, 1.5rem);
+  }
+
+  :where(.dw-split-panel) {
+    display: grid;
+    gap: var(--dw-space-4, 1rem);
+    grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+  }
+
+  :where(.dw-cluster-panel) {
+    display: grid;
+    gap: var(--dw-space-4, 1rem);
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  }
+
+  :where(.dw-sticky-panel) {
+    position: sticky;
+    top: var(--dw-space-4, 1rem);
+  }
+  
+  @media (max-width: 64rem) {
+    :where(.dw-split-panel) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@layer dw-utilities {
+  :where(.dw-bleed) {
+    inline-size: 100%;
+  }
+
+  :where(.dw-min-h-screen) {
+    min-block-size: 100dvh;
+  }
+}
+/*!
+ * DWCSS Core Extension
+ * Repository: ddsurfdws/dwscss
+ * Boundary: Free/Core
+ * Role: Reusable layout primitives.
+ */

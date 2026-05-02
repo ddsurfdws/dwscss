@@ -1,0 +1,123 @@
+/*
+  DWCSS Pro Preview
+  Repository: ddsurfdws/dwscss
+  Boundary: Free/Core documentation and Pro behavior preview.
+  Production Pro source belongs in ddsurfdws/dwcsspaid.
+
+  DW AI-Driven Layout Patterns
+
+  Use this file for semantic layout behaviors that are more than one low-level
+  utility. These classes are intentionally named for intent so AI agents,
+  designers, and humans can recognize the pattern without reconstructing it
+  from overflow, max-size, and state selectors.
+
+  Keep raw one-property primitives in dw.css. Keep reusable multi-class behavior
+  here when the DOM purpose matters.
+*/
+
+@layer dw-utilities {
+  /*
+    .dw-reveal (PRO)
+    Purpose: keep unknown or oversized content calm inside a grid, then reveal
+    the full object on click.
+
+    DOM contract:
+    <div class="dw-reveal">
+      <input class="dw-reveal-toggle" type="checkbox" id="example">
+      <label class="dw-reveal-control" for="example">Show full</label>
+      <div class="dw-reveal-content">...</div>
+    </div>
+  */
+  :where(.dw-reveal) {
+    --dw-reveal-max-block: 18rem;
+    position: relative;
+    display: grid;
+  }
+
+  :where(.dw-reveal-common) {
+    --dw-reveal-max-block: 14rem;
+  }
+
+  :where(.dw-reveal-compact) {
+    --dw-reveal-max-block: 10rem;
+  }
+
+  :where(.dw-reveal-roomy) {
+    --dw-reveal-max-block: 22rem;
+  }
+
+  :where(.dw-reveal-toggle) {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  :where(.dw-reveal-control) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 2.25rem;
+    padding-inline: var(--dw-space-3, 0.75rem);
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-round, 999px);
+    background: color-mix(in srgb, var(--dw-color-surface) 88%, transparent);
+    color: var(--dw-color-text);
+    cursor: pointer;
+    list-style: none;
+    position: absolute;
+    inset-block-start: var(--dw-space-3, 0.75rem);
+    inset-inline-end: var(--dw-space-3, 0.75rem);
+    z-index: 2;
+    backdrop-filter: blur(8px);
+  }
+
+  :where(.dw-reveal-control::before) {
+    content: "+";
+    margin-inline-end: var(--dw-space-2, 0.5rem);
+    color: var(--dw-color-info);
+    font-weight: var(--dw-weight-semibold, 600);
+  }
+
+  :where(.dw-reveal-toggle:checked + .dw-reveal-control::before) {
+    content: "-";
+  }
+
+  :where(.dw-reveal-toggle:focus-visible + .dw-reveal-control) {
+    outline: var(--dw-outline-width, 2px) solid var(--dw-color-focus);
+    outline-offset: var(--dw-outline-offset, 2px);
+  }
+
+  :where(.dw-reveal-content) {
+    position: relative;
+    max-block-size: var(--dw-reveal-max-block, 18rem);
+    overflow: hidden;
+  }
+
+  :where(.dw-reveal-toggle:checked ~ .dw-reveal-content) {
+    max-block-size: none;
+    overflow: visible;
+  }
+
+  :where(.dw-reveal-content::after) {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: min(34%, 5rem);
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent, var(--dw-color-surface));
+  }
+
+  :where(.dw-reveal-toggle:checked ~ .dw-reveal-content::after) {
+    display: none;
+  }
+
+  :where(.dw-reveal-toggle:checked + .dw-reveal-control .dw-reveal-label-closed),
+  :where(.dw-reveal-toggle:not(:checked) + .dw-reveal-control .dw-reveal-label-open) {
+    display: none;
+  }
+}

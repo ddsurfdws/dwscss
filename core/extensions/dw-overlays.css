@@ -1,0 +1,101 @@
+/*
+  DW Overlay Extensions
+  Overlay shells that rely on the frozen DW token contract.
+*/
+
+@layer dw-components {
+  :where(.dw-modal-backdrop) {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: var(--dw-space-5, 1.5rem);
+    background: color-mix(in srgb, black 44%, transparent);
+    z-index: 1000;
+  }
+
+  :where(.dw-modal-backdrop[hidden], .dw-modal-backdrop[aria-hidden="true"]) {
+    display: none !important;
+  }
+
+  :where(.dw-modal) {
+    inline-size: min(100%, 42rem);
+    display: grid;
+    gap: var(--dw-space-4, 1rem);
+    padding: var(--dw-space-5, 1.5rem);
+    background: var(--dw-color-surface);
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-3, 0.75rem);
+    box-shadow: var(--dw-shadow-2);
+  }
+
+  :where(.dw-modal-header, .dw-modal-footer) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--dw-space-3, 0.75rem);
+  }
+
+  :where(.dw-drawer) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    inline-size: min(100%, 30rem);
+    display: grid;
+    align-content: start;
+    gap: var(--dw-space-4, 1rem);
+    padding: var(--dw-space-5, 1.5rem);
+    background: var(--dw-color-surface);
+    border-left: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    box-shadow: var(--dw-shadow-2);
+    z-index: 1001;
+  }
+
+  :where(.dw-drawer[hidden], .dw-drawer[aria-hidden="true"]) {
+    display: none !important;
+  }
+
+  :where(.dw-popover) {
+    inline-size: min(100%, 20rem);
+    display: grid;
+    gap: var(--dw-space-2, 0.5rem);
+    padding: var(--dw-space-3, 0.75rem);
+    background: var(--dw-color-surface);
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-2, 0.5rem);
+    box-shadow: var(--dw-shadow-2);
+  }
+
+  :where(.dw-menu) {
+    display: grid;
+    gap: var(--dw-space-1, 0.25rem);
+    padding: var(--dw-space-1, 0.25rem);
+    background: var(--dw-color-surface);
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-2, 0.5rem);
+    box-shadow: var(--dw-shadow-2);
+  }
+
+  :where(.dw-menu-item) {
+    display: flex;
+    align-items: center;
+    gap: var(--dw-space-2, 0.5rem);
+    min-block-size: 2.5rem;
+    padding: 0 var(--dw-space-3, 0.75rem);
+    border-radius: calc(var(--dw-radius-2, 0.5rem) - 2px);
+    color: var(--dw-color-text);
+    text-decoration: none;
+  }
+
+  :where(.dw-menu-item:hover, .dw-menu-item[aria-current="true"]) {
+    background: var(--dw-color-surface-2);
+  }
+}
+/*!
+ * DWCSS Core Extension
+ * Repository: ddsurfdws/dwscss
+ * Boundary: Free/Core
+ * Role: Reusable overlay layout primitives.
+ */

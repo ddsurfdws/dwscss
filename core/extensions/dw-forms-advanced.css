@@ -1,0 +1,143 @@
+/*
+  DWCSS Core Extension
+  Repository: ddsurfdws/dwscss
+  Boundary: Free/Core
+  Role: Reusable form layout primitives.
+
+  DW Advanced Forms Extensions
+  Higher-level form patterns that consume the frozen DW tokens.
+*/
+
+@layer dw-components {
+  :where(.dw-fieldset) {
+    display: grid;
+    gap: var(--dw-space-4, 1rem);
+    padding: var(--dw-space-5, 1.5rem);
+    margin: 0;
+    background: var(--dw-color-surface);
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-3, 0.75rem);
+  }
+
+  :where(.dw-fieldset > legend) {
+    padding: 0 var(--dw-space-2, 0.5rem);
+    color: var(--dw-color-text);
+    font-weight: var(--dw-weight-semibold, 600);
+  }
+
+  :where(.dw-field-row) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--dw-space-4, 1rem);
+  }
+
+  :where(.dw-input-group) {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  :where(.dw-input-group > .dw-input, .dw-input-group > .dw-select) {
+    flex: 1 1 auto;
+    border-radius: 0;
+  }
+
+  :where(.dw-input-group > :first-child) {
+    border-top-left-radius: var(--dw-radius-2, 0.5rem);
+    border-bottom-left-radius: var(--dw-radius-2, 0.5rem);
+  }
+
+  :where(.dw-input-group > :last-child) {
+    border-top-right-radius: var(--dw-radius-2, 0.5rem);
+    border-bottom-right-radius: var(--dw-radius-2, 0.5rem);
+  }
+
+  :where(.dw-input-addon) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 2.75rem;
+    padding-inline: var(--dw-space-3, 0.75rem);
+    background: var(--dw-color-surface-2);
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    color: var(--dw-color-text-muted);
+  }
+
+  :where(.dw-choice-group) {
+    display: grid;
+    gap: var(--dw-space-3, 0.75rem);
+  }
+
+  :where(.dw-choice) {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--dw-space-3, 0.75rem);
+    padding: var(--dw-space-3, 0.75rem);
+    background: var(--dw-color-surface);
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-2, 0.5rem);
+  }
+
+  :where(.dw-choice input) {
+    margin: 0.2rem 0 0;
+  }
+
+  :where(.dw-choice-body) {
+    display: grid;
+    gap: var(--dw-space-1, 0.25rem);
+  }
+
+  :where(.dw-field-message) {
+    font-size: var(--dw-text-1, 0.875rem);
+  }
+
+  :where(.dw-field-message.is-help) {
+    color: var(--dw-color-text-muted);
+  }
+
+  :where(.dw-field-message.is-error) {
+    color: var(--dw-color-danger);
+  }
+
+  :where(.dw-switch) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dw-space-3, 0.75rem);
+  }
+
+  :where(.dw-switch-control) {
+    position: relative;
+    inline-size: 3.25rem;
+    block-size: 1.875rem;
+    border-radius: var(--dw-radius-round, 999px);
+    background: var(--dw-color-border);
+    transition: background-color var(--dw-transition-fast, 160ms ease);
+  }
+
+  :where(.dw-switch-control::after) {
+    content: "";
+    position: absolute;
+    top: 0.1875rem;
+    left: 0.1875rem;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    border-radius: 999px;
+    background: var(--dw-color-surface);
+    box-shadow: var(--dw-shadow-1);
+    transition: transform var(--dw-transition-fast, 160ms ease);
+  }
+
+  :where(.dw-switch[aria-checked="true"] .dw-switch-control, .dw-switch.is-on .dw-switch-control) {
+    background: var(--dw-color-accent);
+  }
+
+  :where(.dw-switch[aria-checked="true"] .dw-switch-control::after, .dw-switch.is-on .dw-switch-control::after) {
+    transform: translateX(1.375rem);
+  }
+  
+  @media (max-width: 48rem) {
+    :where(.dw-field-row) {
+      grid-template-columns: 1fr;
+    }
+  }
+}

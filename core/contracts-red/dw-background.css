@@ -1,0 +1,169 @@
+/* Copyright (c) 2026 David D Fischer of Brevard Florida. All rights reserved. */
+
+/*!
+ * DWCSS Core Contract Variant
+ * Repository: ddsurfdws/dwscss
+ * Boundary: Free/Core
+ * Role: Starter visual contract variant.
+ */
+
+/*
+  DW Background Contract
+  This is the immutable background engine.
+  User/theme files should supply background inputs only.
+  Final page background properties are assembled here.
+  Background is injected at the page root, preferably body.dw-background-root.
+
+  IMPORTANT FOR AI AGENTS AND INTEGRATORS
+  - Retheme global background behavior here when the site needs a different atmosphere.
+  - This contract is intended to let the whole site shift quickly by changing controlled
+    inputs instead of scattering background values throughout component CSS.
+  - Expected workflow: users configure background direction in the design tool, then
+    replace the generated contract files in Angular so the new background system flows down.
+  - Keep the contract structure and variable names stable.
+  - Downstream CSS should reference the assembled background tokens instead of hardcoding
+    independent page, panel, or shell background systems.
+*/
+
+@layer dw-tokens {
+  :where(
+    body.dw-background-root,
+    body[data-dw-background-root],
+    .dw-background-root,
+    [data-dw-background-root],
+    body.dw-root,
+    body[data-dw-root],
+    .dw-root,
+    [data-dw-root]
+  ) {
+    /* START ROOT BACKGROUND INPUTS */
+--dw-background-key-name: "dealer-red-vault";
+--dw-bg-base-color: #080304;
+--dw-bg-layer-1: radial-gradient(circle at 22% 18%,rgba(255,23,47,.28),transparent 22%);
+--dw-bg-layer-2: radial-gradient(circle at 80% 24%,rgba(255,122,24,.2),transparent 22%);
+--dw-bg-layer-3: linear-gradient(150deg,rgba(255,23,47,.14) 0%,transparent 44%,rgba(255,122,24,.1) 100%);
+--dw-bg-layer-4: linear-gradient(180deg,#17080A 0%,#080304 100%);
+--dw-bg-size-1: auto;
+--dw-bg-size-2: auto;
+--dw-bg-size-3: 100% 100%;
+--dw-bg-size-4: 100% 100%;
+--dw-bg-position-1: center;
+--dw-bg-position-2: center;
+--dw-bg-position-3: center;
+--dw-bg-position-4: center;
+--dw-bg-repeat-1: repeat;
+--dw-bg-repeat-2: repeat;
+--dw-bg-repeat-3: no-repeat;
+--dw-bg-repeat-4: no-repeat;
+--dw-bg-blend-mode: normal;
+--dw-bg-attachment: scroll;
+--dw-bg-animation: none;
+/* END ROOT BACKGROUND INPUTS */
+
+    /* ROOT BACKGROUND GENERATED */
+    --dw-page-background-color: var(--dw-bg-base-color);
+    --dw-page-background-image:
+      var(--dw-bg-layer-1),
+      var(--dw-bg-layer-2),
+      var(--dw-bg-layer-3),
+      var(--dw-bg-layer-4);
+    --dw-page-background-size:
+      var(--dw-bg-size-1),
+      var(--dw-bg-size-2),
+      var(--dw-bg-size-3),
+      var(--dw-bg-size-4);
+    --dw-page-background-position:
+      var(--dw-bg-position-1),
+      var(--dw-bg-position-2),
+      var(--dw-bg-position-3),
+      var(--dw-bg-position-4);
+    --dw-page-background-repeat:
+      var(--dw-bg-repeat-1),
+      var(--dw-bg-repeat-2),
+      var(--dw-bg-repeat-3),
+      var(--dw-bg-repeat-4);
+    --dw-page-background-blend-mode: var(--dw-bg-blend-mode);
+    --dw-page-background-attachment: var(--dw-bg-attachment);
+    --dw-page-background-animation: var(--dw-bg-animation);
+  }
+}
+
+@layer dw-base {
+  :where(
+    body.dw-background-root,
+    body[data-dw-background-root],
+    .dw-background-root,
+    [data-dw-background-root],
+    body.dw-root,
+    body[data-dw-root],
+    .dw-root,
+    [data-dw-root]
+  ) {
+    background-color: var(--dw-page-background-color);
+    background-image: var(--dw-page-background-image);
+    background-size: var(--dw-page-background-size);
+    background-position: var(--dw-page-background-position);
+    background-repeat: var(--dw-page-background-repeat);
+    background-blend-mode: var(--dw-page-background-blend-mode);
+    background-attachment: var(--dw-page-background-attachment);
+    animation: var(--dw-page-background-animation);
+  }
+
+  @keyframes dw-bg-aurora-soft {
+    0% {
+      background-position:
+        0% 0%,
+        100% 0%,
+        50% 100%,
+        center;
+      background-size:
+        124% 124%,
+        134% 134%,
+        144% 144%,
+        100% 100%;
+    }
+
+    50% {
+      background-position:
+        12% 8%,
+        88% 14%,
+        42% 92%,
+        center;
+      background-size:
+        132% 132%,
+        122% 122%,
+        152% 152%,
+        100% 100%;
+    }
+
+    100% {
+      background-position:
+        4% 18%,
+        96% 8%,
+        58% 82%,
+        center;
+      background-size:
+        128% 128%,
+        140% 140%,
+        136% 136%,
+        100% 100%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @layer dw-base {
+    :where(
+      body.dw-background-root,
+      body[data-dw-background-root],
+      .dw-background-root,
+      [data-dw-background-root],
+      body.dw-root,
+      body[data-dw-root],
+      .dw-root,
+      [data-dw-root]
+    ) {
+      animation: none;
+    }
+  }
+}

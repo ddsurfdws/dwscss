@@ -37,6 +37,47 @@ Pro features may include the UI/UIX builder, generated contract tools, advanced 
 
 See [FREE_AND_PRO.md](FREE_AND_PRO.md) for the repository boundary.
 
+## What Is In This Repo
+
+```text
+core/
+  dw.css
+  contracts/
+  contracts-red/
+  extensions/
+
+docs/
+  examples/
+  fromfounder.txt
+```
+
+## Quick Start
+
+Add the core CSS first, then one contract set, then optional extensions.
+
+```html
+<link rel="stylesheet" href="core/dw.css">
+<link rel="stylesheet" href="core/contracts/dw-palette.css">
+<link rel="stylesheet" href="core/contracts/dw-typography.css">
+<link rel="stylesheet" href="core/contracts/dw-background.css">
+<link rel="stylesheet" href="core/contracts/dw-motion.css">
+<link rel="stylesheet" href="core/extensions/dw-layout.css">
+<link rel="stylesheet" href="core/extensions/dw-data.css">
+```
+
+Scope DWCSS to a root element:
+
+```html
+<main class="dw-root" data-dw-root>
+  <section class="dw-panel">
+    <h1>Structured layout, tokenized skin.</h1>
+    <p>DWCSS owns layout. Contracts own visual identity.</p>
+  </section>
+</main>
+```
+
+Open [docs/examples/basic-page.html](docs/examples/basic-page.html) for a small standalone example.
+
 ## Copyright
 
 Copyright (c) 2026 David D Fischer. All rights reserved unless a specific license file says otherwise.

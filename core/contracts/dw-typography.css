@@ -1,0 +1,107 @@
+/* Copyright (c) 2026 David D Fischer of Brevard Florida. All rights reserved. */
+
+/*
+  DW Typography Contract
+  Update this file when changing font families, text scale, line-height,
+  heading/body weights, or typographic voice.
+*/
+
+@layer dw-tokens {
+  :where(.dw-root, [data-dw-root]) {
+    /* START ROOT TYPOGRAPHY */
+--dw-typography-key-name: "builder-grotesk";
+--dw-font-body: "IBM Plex Sans", "Inter", sans-serif;
+--dw-font-heading: "IBM Plex Sans", "Inter", sans-serif;
+--dw-font-label: "IBM Plex Mono", "Roboto Mono", monospace;
+--dw-font-mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+--dw-text-1: 0.875rem;
+--dw-text-2: 1rem;
+--dw-text-3: 1.125rem;
+--dw-text-4: 1.25rem;
+--dw-text-5: 1.5rem;
+--dw-text-6: 2rem;
+--dw-text-7: 3rem;
+--dw-title-display: clamp(2.9rem, 7.2vw, 6.4rem);
+--dw-title-page: clamp(2.6rem, 5.2vw, 4.75rem);
+--dw-title-section: clamp(1.65rem, 2.35vw, 2.35rem);
+--dw-title-card: clamp(1.25rem, 1.6vw, 1.5rem);
+--dw-line-tight: 1.1;
+--dw-line-heading: 1.2;
+--dw-line-body: 1.5;
+--dw-weight-regular: 400;
+--dw-weight-medium: 500;
+--dw-weight-semibold: 600;
+--dw-weight-bold: 700;
+--dw-heading-weight: 700;
+--dw-body-weight: 500;
+--dw-heading-letter-spacing: -0.055em;
+/* END ROOT TYPOGRAPHY */
+  }
+}
+
+@layer dw-base {
+  :where(.dw-root, [data-dw-root]) {
+    font-family: var(--dw-font-body);
+    font-size: var(--dw-text-2, 1rem);
+    font-weight: var(--dw-body-weight, var(--dw-weight-regular, 400));
+    line-height: var(--dw-line-body, 1.5);
+    isolation: isolate;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(h1, h2, h3, h4, h5, h6) {
+    color: var(--dw-color-text);
+    font-family: var(--dw-font-heading);
+    font-weight: var(--dw-heading-weight, var(--dw-weight-semibold, 600));
+    letter-spacing: var(--dw-heading-letter-spacing, -0.02em);
+    line-height: var(--dw-line-heading, 1.2);
+    text-wrap: balance;
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(h1) {
+    font-size: var(--dw-title-page, clamp(2.25rem, 4vw, var(--dw-text-7, 3rem)));
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(h2) {
+    font-size: var(--dw-title-section, clamp(1.75rem, 3vw, var(--dw-text-6, 2rem)));
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(h3) {
+    font-size: var(--dw-title-card, var(--dw-text-5, 1.5rem));
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(h4) {
+    font-size: var(--dw-text-4, 1.25rem);
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(h5) {
+    font-size: var(--dw-text-3, 1.125rem);
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(h6) {
+    font-size: var(--dw-text-2, 1rem);
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(p, li, label, input, select, textarea) {
+    font-size: var(--dw-text-2, 1rem);
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(label, button, input, select, textarea) {
+    font-family: var(--dw-font-label, var(--dw-font-body));
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(small) {
+    font-size: var(--dw-text-1, 0.875rem);
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(code, pre, kbd, samp) {
+    font-family: var(--dw-font-mono, monospace);
+  }
+}
+/*!
+ * DWCSS Core Contract
+ * Repository: ddsurfdws/dwscss
+ * Boundary: Free/Core
+ * Role: Tokenized visual identity contract.
+ */

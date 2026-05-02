@@ -1,0 +1,161 @@
+/* Copyright (c) 2026 David D Fischer of Brevard Florida. All rights reserved. */
+
+/*!
+ * DWCSS Core Contract Variant
+ * Repository: ddsurfdws/dwscss
+ * Boundary: Free/Core
+ * Role: Starter visual contract variant.
+ */
+
+/*
+  DW Palette Contract
+  This is the immutable palette engine.
+  User/theme files should supply seed colors only.
+  Generated palette, semantic roles, and effects are computed here.
+
+  IMPORTANT FOR AI AGENTS AND INTEGRATORS
+  - Treat this file as a theme authority, not a place for ad hoc component styling.
+  - If the site is rethemed, palette changes should happen here so downstream surfaces
+    update together through the semantic token chain.
+  - This is what allows rapid reshaping of site-wide color behavior without rewriting
+    every component, page, or feature stylesheet.
+  - Expected workflow: users configure theme choices in the design tool, then replace
+    the generated contract files in Angular. Color changes should propagate from here.
+  - Keep the contract structure, key names, and token schema intact.
+  - Change values intentionally; do not rename, flatten, or replace the contract model.
+  - App, template, and feature CSS should consume these variables rather than inventing
+    parallel color systems or hardcoded fallbacks.
+*/
+
+@layer dw-tokens {
+  :where(.dw-root, [data-dw-root]) {
+    /* ROOT PALETTE */
+    --dw-color-scheme: normal;
+
+    /* START DW AI PALETTE PRIMARIES */
+    --dw-ai-primary-1-key-name: "red";
+    --dw-ai-primary-1-hsl: 0 100% 50%;
+    --dw-ai-primary-2-key-name: "green";
+    --dw-ai-primary-2-hsl: 120 100% 50%;
+    --dw-ai-primary-3-key-name: "blue";
+    --dw-ai-primary-3-hsl: 240 100% 50%;
+    /* END DW AI PALETTE PRIMARIES */
+
+/* START DW AI PALETTE COLORS */
+--dw-ai-palette-id: "dealer-white-heat-enhanced";
+--dw-ai-palette-key-name: "Dealer White Heat-enhanced";
+--dw-ai-palette-color-1-hsl: 351 100% 57%;
+--dw-ai-palette-color-2-hsl: 0 0% 100%;
+--dw-ai-palette-color-3-hsl: 352 100% 79%;
+/* END DW AI PALETTE COLORS */
+
+    /* START ROOT PALETTE SEEDS */
+--dw-palette-id: "dealer-white-heat";
+--dw-palette-key-name: "Dealer White Heat";
+--dw-seed-page: #060608;
+--dw-seed-surface: #111317;
+--dw-seed-text: #ffffff;
+--dw-seed-muted: #c4cbd3;
+--dw-seed-primary: #ff2645;
+--dw-seed-accent: #ffffff;
+--dw-seed-border: #3c4350;
+--dw-seed-focus: #ff2645;
+--dw-seed-success: #ffffff;
+--dw-seed-info: #ff2645;
+--dw-seed-danger: #ff2645;
+--dw-seed-warning: #ffffff;
+/* END ROOT PALETTE SEEDS */
+
+    /* PALETTE RECIPE - IMMUTABLE BASE */
+    --dw-recipe-surface-2-mix: 86%;
+    --dw-recipe-surface-3-mix: 72%;
+    --dw-recipe-accent-strong-mix: 84%;
+    --dw-recipe-accent-soft-mix: 18%;
+    --dw-recipe-border-strong-mix: 76%;
+    --dw-recipe-line-mix: 34%;
+    --dw-recipe-focus-ring-mix: 22%;
+    --dw-recipe-shadow-1-mix: 24%;
+    --dw-recipe-shadow-2-mix: 36%;
+
+    /* ROOT PALETTE GENERATED */
+    --dw-palette-page: var(--dw-seed-page);
+    --dw-palette-surface: var(--dw-seed-surface);
+    --dw-palette-surface-2: color-mix(in srgb, var(--dw-seed-surface) var(--dw-recipe-surface-2-mix), var(--dw-seed-text));
+    --dw-palette-surface-3: color-mix(in srgb, var(--dw-seed-surface) var(--dw-recipe-surface-3-mix), var(--dw-seed-text));
+    --dw-palette-text: var(--dw-seed-text);
+    --dw-palette-text-muted: var(--dw-seed-muted);
+    --dw-palette-accent: var(--dw-seed-primary);
+    --dw-palette-accent-strong: color-mix(in srgb, var(--dw-seed-primary) var(--dw-recipe-accent-strong-mix), var(--dw-seed-page));
+    --dw-palette-accent-soft: color-mix(in srgb, var(--dw-seed-accent) var(--dw-recipe-accent-soft-mix), transparent);
+    --dw-palette-border: var(--dw-seed-border);
+    --dw-palette-border-strong: color-mix(in srgb, var(--dw-seed-border) var(--dw-recipe-border-strong-mix), var(--dw-seed-text));
+    --dw-palette-focus: var(--dw-seed-focus);
+    --dw-palette-success: var(--dw-seed-success);
+    --dw-palette-info: var(--dw-seed-info);
+    --dw-palette-danger: var(--dw-seed-danger);
+    --dw-palette-warning: var(--dw-seed-warning);
+
+    /* ROOT PALETTE SEMANTIC */
+    --dw-color-page: var(--dw-palette-page);
+    --dw-color-surface: var(--dw-palette-surface);
+    --dw-color-surface-2: var(--dw-palette-surface-2);
+    --dw-color-surface-3: var(--dw-palette-surface-3);
+    --dw-color-text: var(--dw-palette-text);
+    --dw-color-text-muted: var(--dw-palette-text-muted);
+    --dw-color-accent: var(--dw-palette-accent);
+    --dw-color-accent-strong: var(--dw-palette-accent-strong);
+    --dw-color-accent-soft: var(--dw-palette-accent-soft);
+    --dw-color-border: var(--dw-palette-border);
+    --dw-color-border-strong: var(--dw-palette-border-strong);
+    --dw-color-focus: var(--dw-palette-focus);
+    --dw-color-success: var(--dw-palette-success);
+    --dw-color-info: var(--dw-palette-info);
+    --dw-color-danger: var(--dw-palette-danger);
+    --dw-color-warning: var(--dw-palette-warning);
+    --dw-color-on-accent: var(--dw-palette-text);
+    --dw-color-on-danger: var(--dw-palette-text);
+
+    /* ROOT PALETTE EFFECTS */
+    --dw-effect-line: color-mix(in srgb, var(--dw-seed-border) var(--dw-recipe-line-mix), transparent);
+    --dw-effect-submenu-top: var(--dw-color-accent);
+    --dw-effect-submenu-bottom: var(--dw-color-border);
+    --dw-effect-focus-ring: color-mix(in srgb, var(--dw-color-focus) var(--dw-recipe-focus-ring-mix), transparent);
+    --dw-effect-shadow-color-1: color-mix(in srgb, black var(--dw-recipe-shadow-1-mix), transparent);
+    --dw-effect-shadow-color-2: color-mix(in srgb, black var(--dw-recipe-shadow-2-mix), transparent);
+  }
+
+  :where(.dw-root, [data-dw-root]) {
+    color-scheme: var(--dw-color-scheme, normal);
+  }
+}
+
+@layer dw-base {
+  :where(.dw-root, [data-dw-root]) {
+    color: var(--dw-color-text);
+    accent-color: var(--dw-color-accent);
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(a) {
+    color: var(--dw-color-accent);
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.16em;
+    transition: color var(--dw-transition-fast, 160ms ease);
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(a:hover) {
+    color: var(--dw-color-accent-strong);
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(hr) {
+    border: 0;
+    block-size: 1px;
+    margin: 0;
+    background: var(--dw-effect-line);
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(:focus-visible) {
+    outline: var(--dw-outline-width, 2px) solid var(--dw-color-focus);
+    outline-offset: var(--dw-outline-offset, 2px);
+    box-shadow: var(--dw-shadow-focus, 0 0 0 3px var(--dw-effect-focus-ring));
+  }
+}

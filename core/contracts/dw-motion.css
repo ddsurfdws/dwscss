@@ -1,0 +1,33 @@
+/* Copyright (c) 2026 David D Fischer of Brevard Florida. All rights reserved. */
+
+/*
+  DW Motion Contract
+  Motion stays behavior-first and should only define the sweep the site uses.
+  Keep motion readable and restrained so the final site has room to feel premium.
+*/
+
+@layer dw-tokens {
+  :where(.dw-root, [data-dw-root]) {
+    /* START ROOT MOTION */
+    --dw-motion-key-name: "quiet-fade";
+    --dw-motion-mode: "fade";
+    --dw-motion-duration: 240ms;
+    --dw-motion-duration-slow: 640ms;
+    --dw-motion-ease: ease-in-out;
+    --dw-motion-lift-distance: -3px;
+    --dw-motion-entry-distance: 14px;
+    --dw-motion-panel-distance: 24px;
+    --dw-motion-scale: 0.99;
+    --dw-motion-stagger-delay: 40ms;
+    --dw-motion-ambient-duration: 0s;
+    --dw-transition-fast: var(--dw-motion-duration) var(--dw-motion-ease);
+    --dw-transition-base: var(--dw-motion-duration-slow) var(--dw-motion-ease);
+    /* END ROOT MOTION */
+  }
+}
+/*!
+ * DWCSS Core Contract
+ * Repository: ddsurfdws/dwscss
+ * Boundary: Free/Core
+ * Role: Tokenized visual identity contract.
+ */

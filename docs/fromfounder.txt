@@ -1,0 +1,41 @@
+From Founder:
+
+I have always found it important to structure code from the model all the way to the DOM. That is how DWCSS was born: simple for AI, useful for strong front ends, and structured for rapid coding with as little drift as possible.
+
+It never made sense to build on something that might expire. We already deal with breaking changes in APIs, Angular, and other fast-moving frameworks. Large codebases need structure that can last.
+
+I gladly accept donations to continue this work from the model layer to the front end. The goal is to give programmers code that is as drift-free as possible. When AI starts talking in circles, it often means the code architecture has a flaw. The AI is stuck because it does not know where the work belongs.
+
+This is not only about working with a template someone might buy. It is also about twenty years of work that may no longer be usable. How do we make old work usable for decades to come? Many of us built great sites years ago, only to lose them to expired frameworks, unsupported CSS systems, or end-of-life security issues.
+
+A CSS framework should grow, yes, but it should grow in a way that does not destroy the structure underneath it.
+
+A pattern should outlast the designer, programmer, or coder who created it. It should also provide structured documentation for AI.
+
+The small Pro version is simply a collection of updates I use often. It includes a UI/UIX builder that will continue to grow and works with me and AI to build unlimited color schemes and other tokenized visual systems. It also includes automated routine tasks such as npm install/delete and framework setup flows. I doubt most developers could build those faster than the nominal cost. The cost will be used to continue training and improving drift-free coding.
+
+As a developer who is strongest in APIs, data structures, and business logic, I found front ends constantly changing. By the time I finished a large Angular task, or in earlier years a VB6 or other front-end task, the front-end system would change, break, or be replaced. Then the front end was dead and needed a rewrite.
+
+So I wrote one that is simply there forever.
+
+Coding today is like running a restaurant. You might have the best location, the best service, and great food, but you may not also have the best price. You cannot have all four. Coding is the same. A coder can master many fields of work, but not all fields. A coder might know APIs, data structures, repository patterns, Unit of Work, and business logic, but not also master CSS, Angular, and every new front-end change.
+
+Something has to be handed to another responsible function. Today, that function can be AI, if the structure is clear enough.
+
+That is what this is: a CSS system that AI can use without needing extra LLM tricks or large skill files. The structure allows AI to work inside a system it understands while building strong front ends. Those front ends can then be templated with the UI/UIX builder.
+
+At the current moment, I can work through 140,000 lines of code in a day. The code still looks like I wrote it. It is debuggable and clean. I will keep working to enhance that reality. I do not want large added skill files or heavy markdown rulebooks. If a helper file is needed, it should be very small.
+
+I will build an area that explains in detail how I achieved that result. That information will be included with the Pro purchase to assist other programmers.
+
+I do not use Claude or other systems for this workflow. I use a Codex chat window. After a full day, or after two days, a thread may lag because of PC size and context size. It is not lagging because of drift or hallucination. People hallucinate too, and that causes AI to drift or just talk. I figured that out the hard way and implemented a solution.
+
+I have fought drifting code from one developer to another since the 1980s. I got very tired of interpreting code, and that is how I learned to code. AI navigates and builds effectively when it is given strong structure, logical architecture, clear rules, and fewer places to guess.
+
+This code will not have an end of life. It will not have breaking changes. The core is concrete. It can support millions of lines of front-end code that do not need to change every few years. That allows coders like me to build larger codebases that can last for decades.
+
+DWCSS will remain tokenized and math-based.
+
+Sincerely,
+David Fischer
+321-292-9429

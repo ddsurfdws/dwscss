@@ -1,0 +1,99 @@
+/* Copyright (c) 2026 David D Fischer of Brevard Florida. All rights reserved. */
+
+/*
+  DW Background Contract
+  This is the immutable background engine.
+  User/theme files should supply background inputs only.
+  Final page background properties are assembled here.
+  Background is injected at the page root, preferably body.dw-background-root.
+*/
+
+@layer dw-tokens {
+  :where(
+    body.dw-background-root,
+    body[data-dw-background-root],
+    .dw-background-root,
+    [data-dw-background-root],
+    body.dw-root,
+    body[data-dw-root],
+    .dw-root,
+    [data-dw-root]
+  ) {
+    /* START ROOT BACKGROUND INPUTS */
+--dw-background-key-name: "dashboard-redline-field";
+--dw-bg-base-color: #060708;
+--dw-bg-layer-1: radial-gradient(circle at 18% 16%,rgba(185,28,43,.12),transparent 28%);
+--dw-bg-layer-2: radial-gradient(circle at 84% 20%,rgba(18,184,215,.24),transparent 26%);
+--dw-bg-layer-3: linear-gradient(135deg,rgba(248,250,252,.06),transparent 32%);
+--dw-bg-layer-4: linear-gradient(180deg,#111417 0%,#060708 100%);
+--dw-bg-size-1: auto;
+--dw-bg-size-2: auto;
+--dw-bg-size-3: auto;
+--dw-bg-size-4: 100% 100%;
+--dw-bg-position-1: center;
+--dw-bg-position-2: center;
+--dw-bg-position-3: center;
+--dw-bg-position-4: center;
+--dw-bg-repeat-1: repeat;
+--dw-bg-repeat-2: repeat;
+--dw-bg-repeat-3: repeat;
+--dw-bg-repeat-4: no-repeat;
+--dw-bg-blend-mode: normal;
+--dw-bg-attachment: scroll;
+--dw-bg-animation: none;
+/* END ROOT BACKGROUND INPUTS */
+    /* ROOT BACKGROUND GENERATED */
+    --dw-page-background-color: var(--dw-bg-base-color);
+    --dw-page-background-image:
+      var(--dw-bg-layer-1),
+      var(--dw-bg-layer-2),
+      var(--dw-bg-layer-3),
+      var(--dw-bg-layer-4);
+    --dw-page-background-size:
+      var(--dw-bg-size-1),
+      var(--dw-bg-size-2),
+      var(--dw-bg-size-3),
+      var(--dw-bg-size-4);
+    --dw-page-background-position:
+      var(--dw-bg-position-1),
+      var(--dw-bg-position-2),
+      var(--dw-bg-position-3),
+      var(--dw-bg-position-4);
+    --dw-page-background-repeat:
+      var(--dw-bg-repeat-1),
+      var(--dw-bg-repeat-2),
+      var(--dw-bg-repeat-3),
+      var(--dw-bg-repeat-4);
+    --dw-page-background-blend-mode: var(--dw-bg-blend-mode);
+    --dw-page-background-attachment: var(--dw-bg-attachment);
+    --dw-page-background-animation: var(--dw-bg-animation);
+  }
+}
+
+@layer dw-base {
+  :where(
+    body.dw-background-root,
+    body[data-dw-background-root],
+    .dw-background-root,
+    [data-dw-background-root],
+    body.dw-root,
+    body[data-dw-root],
+    .dw-root,
+    [data-dw-root]
+  ) {
+    background-color: var(--dw-page-background-color);
+    background-image: var(--dw-page-background-image);
+    background-size: var(--dw-page-background-size);
+    background-position: var(--dw-page-background-position);
+    background-repeat: var(--dw-page-background-repeat);
+    background-blend-mode: var(--dw-page-background-blend-mode);
+    background-attachment: var(--dw-page-background-attachment);
+    animation: var(--dw-page-background-animation);
+  }
+}
+/*!
+ * DWCSS Core Contract
+ * Repository: ddsurfdws/dwscss
+ * Boundary: Free/Core
+ * Role: Tokenized visual identity contract.
+ */

@@ -1,0 +1,1387 @@
+/* Copyright (c) 2026 David D Fischer of Brevard Florida. All rights reserved. */
+
+/*!
+ * DWCSS Core
+ * Repository: ddsurfdws/dwscss
+ * Boundary: Free/Core
+ * Role: Stable layout primitives and framework-neutral structure.
+ */
+
+/*
+  DW CSS v0.1
+  Namespaced, token-based, low-conflict foundation.
+  Scope base element rules by applying .dw-root or [data-dw-root].
+
+  IMPORTANT FOR AI AGENTS AND INTEGRATORS
+  - This file is intentionally scoped. It is not a universal global framework.
+  - DW CSS is designed to coexist with other systems such as Tailwind, Bootstrap,
+    custom CMS CSS, or app-specific layers without taking ownership of the whole document.
+  - The intended theme workflow is:
+    - a user configures design inputs in the design tool
+    - the design tool outputs updated contract files
+    - the app replaces contracts/*.css
+    - DW CSS and downstream feature styles inherit the new system
+  - The main contract is: opt into DW behavior by wrapping an area in .dw-root
+    or [data-dw-root]. If a surface is outside that scope, DW tokens should not
+    be assumed to exist there.
+  - DW CSS is meant to provide fast building blocks:
+    - immutable token contracts imported below
+    - semantic color and background variables
+    - layout utilities
+    - form, button, and panel primitives
+    - the 24-column grid and span helpers
+  - DW CSS is not meant to force body/html theme ownership. That is deliberate.
+    Teams may layer another framework or project-level shell on top.
+  - If you need app-wide theme behavior, prefer applying it on the DW app shell
+    (.dw-root) rather than introducing hardcoded global body colors/backgrounds.
+  - When extending DW CSS, consume the existing token variables instead of adding
+    unrelated color systems or renaming contract keys.
+  - If a retheme seems to require broad component rewrites, first check whether the
+    needed change belongs in contracts/*.css instead.
+*/
+
+@layer dw-reset, dw-tokens, dw-base, dw-components, dw-utilities;
+@import url("./contracts/dw-palette.css");
+@import url("./contracts/dw-background.css");
+@import url("./contracts/dw-typography.css");
+@import url("./contracts/dw-motion.css");
+
+@layer dw-tokens {
+  /*
+    Core DW runtime tokens live inside .dw-root scope on purpose.
+    This keeps the system opt-in and prevents accidental collisions with
+    third-party CSS frameworks or unrelated site code.
+  */
+  :where(.dw-root, [data-dw-root]) {
+    --dw-grid-columns: 24;
+    --dw-size-page-max: 80rem;
+
+    --dw-space-0: 0;
+    --dw-space-1: 0.25rem;
+    --dw-space-2: 0.5rem;
+    --dw-space-3: 0.75rem;
+    --dw-space-4: 1rem;
+    --dw-space-5: 1.5rem;
+    --dw-space-6: 2rem;
+    --dw-space-7: 3rem;
+    --dw-space-8: 4rem;
+    --dw-space-9: 6rem;
+
+    --dw-radius-1: 0.375rem;
+    --dw-radius-2: 0.5rem;
+    --dw-radius-3: 0.75rem;
+    --dw-radius-4: 1rem;
+    --dw-radius-round: 999px;
+
+    --dw-shadow-1: 0 12px 28px var(--dw-effect-shadow-color-1);
+    --dw-shadow-2: 0 22px 56px var(--dw-effect-shadow-color-2);
+    --dw-shadow-focus: 0 0 0 3px var(--dw-effect-focus-ring);
+
+    --dw-border-width: 1px;
+    --dw-outline-width: 2px;
+    --dw-outline-offset: 2px;
+
+    --dw-transition-fast: var(--dw-motion-duration, 160ms) var(--dw-motion-ease, ease);
+    --dw-transition-base: var(--dw-motion-duration-slow, 220ms) var(--dw-motion-ease, ease);
+
+    --dw-breakpoint-sm: 40rem;
+    --dw-breakpoint-md: 48rem;
+    --dw-breakpoint-lg: 64rem;
+    --dw-breakpoint-xl: 80rem;
+  }
+
+}
+
+@layer dw-reset {
+  /*
+    Reset rules are also scoped to .dw-root.
+    This is a compatibility feature, not a limitation:
+    DW should normalize only the surfaces that opt into DW.
+  */
+  :where(.dw-root, [data-dw-root]),
+  :where(.dw-root, [data-dw-root]) *,
+  :where(.dw-root, [data-dw-root]) *::before,
+  :where(.dw-root, [data-dw-root]) *::after {
+    box-sizing: border-box;
+  }
+
+  :where(.dw-root, [data-dw-root]) {
+    min-width: 0;
+    text-size-adjust: 100%;
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(*) {
+    min-width: 0;
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd) {
+    margin: 0;
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(ul, ol) {
+    margin: 0;
+    padding-inline-start: 1.25em;
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(button, input, select, textarea) {
+    font: inherit;
+    color: inherit;
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(button) {
+    cursor: pointer;
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(img, picture, svg, canvas, video, iframe, embed, object) {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+    border: 0;
+  }
+
+  :where(.dw-root, [data-dw-root]) :where(table) {
+    inline-size: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  :where(.dw-root, [data-dw-root]) :where([hidden]) {
+    display: none !important;
+  }
+}
+
+@layer dw-base {
+  /*
+    Base behaviors establish DW-local defaults such as isolation and interaction affordances.
+    They intentionally avoid claiming global body/html ownership.
+  */
+  :where(.dw-root, [data-dw-root]) {
+    isolation: isolate;
+  }
+
+  :where(.dw-root, [data-dw-root]) :where([data-dw-slot], [data-dw-repeat] > *, .dw-grid > *) {
+    min-width: 0;
+  }
+
+  :where(.dw-root, [data-dw-root]) :where([data-dw-edit]) {
+    cursor: text;
+  }
+
+  :where(.dw-root, [data-dw-root]) :where([data-dw-ignore="true"]) {
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+@layer dw-components {
+  /*
+    DW component primitives are framework-agnostic building blocks.
+    They are safe to use directly or alongside another system that owns
+    page structure, routing, or higher-level component patterns.
+  */
+  :where(.dw-shell) {
+    min-block-size: 100dvh;
+  }
+
+  :where(.dw-container) {
+    inline-size: min(100%, var(--dw-size-page-max, 80rem));
+    margin-inline: auto;
+    padding-inline: var(--dw-space-5, 1.5rem);
+  }
+
+  :where(.dw-section) {
+    padding-block: var(--dw-space-8, 4rem);
+  }
+
+  :where(.dw-surface, .dw-card, .dw-panel, .dw-header, .dw-footer) {
+    background: var(--dw-color-surface);
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-3, 0.75rem);
+    box-shadow: var(--dw-shadow-1);
+  }
+
+  :where(.dw-card, .dw-panel) {
+    padding: var(--dw-space-6, 2rem);
+  }
+
+  :where(.dw-card-frame) {
+    display: grid;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  :where(.dw-card-head, .dw-card-body, .dw-card-foot) {
+    padding: var(--dw-space-4, 1rem);
+  }
+
+  :where(.dw-card-head, .dw-card-foot) {
+    background: var(--dw-color-surface-2);
+  }
+
+  :where(.dw-card-head) {
+    border-block-end: var(--dw-border-width, 1px) solid var(--dw-color-border);
+  }
+
+  :where(.dw-card-foot) {
+    border-block-start: var(--dw-border-width, 1px) solid var(--dw-color-border);
+  }
+
+  :where(.dw-card-actions) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--dw-space-3, 0.75rem);
+  }
+
+  :where(.dw-header, .dw-footer) {
+    padding: var(--dw-space-4, 1rem) var(--dw-space-5, 1.5rem);
+    background: var(--dw-color-surface-2);
+    border-color: var(--dw-color-border);
+  }
+
+  :where(.dw-footer) {
+    color: var(--dw-color-text-muted);
+  }
+
+  :where(.dw-nav-list) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--dw-space-3, 0.75rem);
+    list-style: none;
+    padding: 0;
+  }
+
+  :where(.dw-nav-link) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dw-space-2, 0.5rem);
+    padding: var(--dw-space-2, 0.5rem) var(--dw-space-3, 0.75rem);
+    border-radius: var(--dw-radius-round, 999px);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      background-color var(--dw-transition-fast, 160ms ease),
+      color var(--dw-transition-fast, 160ms ease);
+  }
+
+  :where(.dw-nav-link:hover) {
+    background: var(--dw-color-accent-soft);
+    color: var(--dw-color-accent-strong);
+  }
+
+  :where(.dw-button, .dw-button-secondary, .dw-button-ghost, .dw-button-danger) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--dw-space-2, 0.5rem);
+    min-block-size: 2.75rem;
+    padding-inline: var(--dw-space-4, 1rem);
+    border: var(--dw-border-width, 1px) solid transparent;
+    border-radius: var(--dw-radius-round, 999px);
+    font-size: var(--dw-text-2, 1rem);
+    font-weight: var(--dw-weight-semibold, 600);
+    line-height: 1;
+    text-decoration: none;
+    transition:
+      transform var(--dw-transition-fast, 160ms ease),
+      background-color var(--dw-transition-fast, 160ms ease),
+      border-color var(--dw-transition-fast, 160ms ease),
+      color var(--dw-transition-fast, 160ms ease),
+      box-shadow var(--dw-transition-fast, 160ms ease);
+  }
+
+  :where(.dw-button:hover, .dw-button-secondary:hover, .dw-button-ghost:hover, .dw-button-danger:hover) {
+    transform: translateY(var(--dw-motion-lift-distance, -1px));
+  }
+
+  :where(.dw-button) {
+    background: var(--dw-color-accent);
+    color: var(--dw-color-on-accent);
+  }
+
+  :where(.dw-button:hover) {
+    background: var(--dw-color-accent-strong);
+  }
+
+  :where(.dw-button-secondary) {
+    background: var(--dw-color-surface);
+    border-color: var(--dw-color-border);
+    color: var(--dw-color-text);
+  }
+
+  :where(.dw-button-secondary:hover) {
+    border-color: var(--dw-color-border-strong);
+    background: var(--dw-color-surface-2);
+  }
+
+  :where(.dw-button-ghost) {
+    background: transparent;
+    color: var(--dw-color-text);
+  }
+
+  :where(.dw-button-ghost:hover) {
+    background: var(--dw-color-surface-2);
+  }
+
+  :where(.dw-button-danger) {
+    background: var(--dw-color-danger);
+    color: var(--dw-color-on-danger);
+  }
+
+  :where(.dw-field) {
+    display: grid;
+    gap: var(--dw-space-2, 0.5rem);
+  }
+
+  :where(.dw-label) {
+    color: var(--dw-color-text);
+    font-size: var(--dw-text-1, 0.875rem);
+    font-weight: var(--dw-weight-semibold, 600);
+  }
+
+  :where(.dw-help) {
+    color: var(--dw-color-text-muted);
+    font-size: var(--dw-text-1, 0.875rem);
+  }
+
+  :where(.dw-input, .dw-select, .dw-textarea) {
+    inline-size: 100%;
+    min-block-size: 2.75rem;
+    padding: 0.75rem 0.875rem;
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-2, 0.5rem);
+    background: var(--dw-color-surface);
+    color: var(--dw-color-text);
+    transition:
+      border-color var(--dw-transition-fast, 160ms ease),
+      box-shadow var(--dw-transition-fast, 160ms ease);
+  }
+
+  :where(.dw-textarea) {
+    min-block-size: 8rem;
+    resize: vertical;
+  }
+
+  :where(.dw-input::placeholder, .dw-textarea::placeholder) {
+    color: var(--dw-color-text-muted);
+  }
+
+  :where(.dw-input:hover, .dw-select:hover, .dw-textarea:hover) {
+    border-color: var(--dw-color-border-strong);
+  }
+
+  :where(.dw-input:focus, .dw-select:focus, .dw-textarea:focus) {
+    border-color: var(--dw-color-focus);
+    outline: none;
+    box-shadow: var(--dw-shadow-focus);
+  }
+
+  /*
+    Dense cloud-form primitives for real business software.
+    Use these when visible space matters: finance screens, admin records,
+    dashboards, CRM rows, inventory editors, and high-volume data entry.
+  */
+  :where(.dw-cloud-form) {
+    display: grid;
+    gap: var(--dw-space-4, 1rem);
+  }
+
+  :where(.dw-cloud-form-grid) {
+    display: grid;
+    grid-template-columns: repeat(var(--dw-cloud-form-columns, 3), minmax(var(--dw-cloud-form-min, 15rem), 1fr));
+    gap: var(--dw-space-4, 1rem);
+    align-items: start;
+  }
+
+  :where(.dw-cloud-fieldset) {
+    display: grid;
+    gap: var(--dw-space-2, 0.5rem);
+    margin: 0;
+    padding: var(--dw-space-3, 0.75rem);
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-2, 0.5rem);
+    background: color-mix(in srgb, var(--dw-color-info) 5%, var(--dw-color-surface));
+  }
+
+  :where(.dw-cloud-fieldset legend) {
+    padding-inline: var(--dw-space-2, 0.5rem);
+    color: var(--dw-color-text-muted);
+    font-size: var(--dw-text-1, 0.875rem);
+    font-weight: var(--dw-weight-semibold, 600);
+    text-transform: uppercase;
+  }
+
+  :where(.dw-cloud-row) {
+    display: grid;
+    grid-template-columns: minmax(var(--dw-cloud-label-min, 6.5rem), 0.8fr) minmax(var(--dw-cloud-control-min, 7rem), 1fr);
+    gap: var(--dw-space-2, 0.5rem);
+    align-items: center;
+    min-block-size: var(--dw-cloud-control-height, 2rem);
+  }
+
+  :where(.dw-cloud-row > span, .dw-cloud-label) {
+    color: var(--dw-color-text);
+    font-size: var(--dw-text-1, 0.875rem);
+    text-align: right;
+  }
+
+  :where(.dw-cloud-control) {
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--dw-cloud-control-height, 2rem);
+    padding: 0 var(--dw-space-2, 0.5rem);
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-1, 0.375rem);
+    background: color-mix(in srgb, var(--dw-color-bg) 82%, white);
+    color: var(--dw-color-text);
+    font: inherit;
+    font-size: var(--dw-text-1, 0.875rem);
+  }
+
+  :where(select.dw-cloud-control) {
+    color-scheme: dark;
+    background-color: color-mix(in srgb, var(--dw-color-surface) 78%, var(--dw-color-bg));
+    color: var(--dw-color-text);
+  }
+
+  :where(select.dw-cloud-control option) {
+    background: var(--dw-color-bg);
+    color: var(--dw-color-text);
+  }
+
+  :where(select.dw-cloud-control option:checked) {
+    background: var(--dw-color-accent);
+    color: var(--dw-color-on-accent);
+  }
+
+  :where(.dw-cloud-control:hover) {
+    border-color: var(--dw-color-border-strong);
+  }
+
+  :where(.dw-cloud-control:focus) {
+    border-color: var(--dw-color-focus);
+    outline: none;
+    box-shadow: var(--dw-shadow-focus);
+  }
+
+  :where(.dw-cloud-money, .dw-cloud-number) {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  :where(.dw-cloud-money.is-positive, .dw-cloud-number.is-positive) {
+    color: var(--dw-color-success);
+  }
+
+  :where(.dw-cloud-money.is-negative, .dw-cloud-number.is-negative) {
+    color: var(--dw-color-danger);
+  }
+
+  :where(.dw-cloud-actions) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--dw-space-2, 0.5rem);
+    padding-block-start: var(--dw-space-2, 0.5rem);
+    border-block-start: var(--dw-border-width, 1px) solid var(--dw-color-border);
+  }
+
+  @media (max-width: 82rem) {
+    :where(.dw-cloud-form-grid) {
+      grid-template-columns: 1fr;
+    }
+
+    :where(.dw-cloud-row) {
+      grid-template-columns: minmax(var(--dw-cloud-label-min, 6.5rem), 0.45fr) minmax(8rem, 1fr);
+    }
+  }
+
+  @media (max-width: 34rem) {
+    :where(.dw-cloud-row) {
+      grid-template-columns: 1fr;
+    }
+
+    :where(.dw-cloud-row > span, .dw-cloud-label) {
+      text-align: left;
+    }
+  }
+
+  :where(.dw-badge) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dw-space-2, 0.5rem);
+    min-block-size: 1.75rem;
+    padding-inline: var(--dw-space-3, 0.75rem);
+    border-radius: var(--dw-radius-round, 999px);
+    background: var(--dw-color-accent-soft);
+    color: var(--dw-color-accent-strong);
+    font-size: var(--dw-text-1, 0.875rem);
+    font-weight: var(--dw-weight-semibold, 600);
+  }
+
+  :where(.dw-divider) {
+    block-size: 1px;
+    background: var(--dw-effect-line);
+  }
+
+  :where(.dw-overlay) {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: grid;
+    place-items: center;
+    padding: var(--dw-space-5, 1.5rem);
+    background: color-mix(in srgb, black 64%, transparent);
+  }
+
+  :where(.dw-modal) {
+    inline-size: min(100%, var(--dw-modal-width, 38rem));
+    max-block-size: min(100%, 42rem);
+    overflow: auto;
+  }
+
+  :where(.dw-modal-sm) { --dw-modal-width: 28rem; }
+  :where(.dw-modal-md) { --dw-modal-width: 38rem; }
+  :where(.dw-modal-lg) { --dw-modal-width: 54rem; }
+
+  :where(.dw-drawer-shell) {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: grid;
+    background: color-mix(in srgb, black 56%, transparent);
+  }
+
+  :where(.dw-drawer) {
+    inline-size: min(100%, var(--dw-drawer-width, 24rem));
+    max-inline-size: 100%;
+    block-size: 100%;
+    overflow: auto;
+  }
+
+  :where(.dw-drawer-right) { justify-items: end; }
+  :where(.dw-drawer-left) { justify-items: start; }
+  :where(.dw-drawer-bottom) {
+    align-items: end;
+  }
+
+  :where(.dw-drawer-bottom > .dw-drawer) {
+    inline-size: 100%;
+    block-size: auto;
+    max-block-size: 80dvh;
+  }
+
+  :where(.dw-gallery) {
+    display: grid;
+    gap: var(--dw-gallery-gap, var(--dw-space-4, 1rem));
+  }
+
+  :where(.dw-gallery-main) {
+    overflow: hidden;
+  }
+
+  :where(.dw-gallery-rail) {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(5rem, 8rem);
+    gap: var(--dw-space-2, 0.5rem);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    padding-block-end: var(--dw-space-1, 0.25rem);
+  }
+
+  :where(.dw-gallery-thumb) {
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-2, 0.5rem);
+    background: var(--dw-color-surface-2);
+  }
+
+  :where(.dw-gallery-grid) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+    gap: var(--dw-space-3, 0.75rem);
+  }
+}
+
+@layer dw-utilities {
+  /*
+    Utilities provide composition speed without requiring a separate utility framework.
+    The 24-column helpers are a core DW capability and are intended to remain available
+    even when teams later add Bootstrap, Tailwind, or custom app-level abstractions.
+  */
+  :where(.dw-flow) > * + * {
+    margin-block-start: var(--dw-flow-space, var(--dw-space-4, 1rem));
+  }
+
+  :where(.dw-stack) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dw-stack-gap, var(--dw-space-4, 1rem));
+  }
+
+  :where(.dw-stack-tight) { --dw-stack-gap: var(--dw-space-2, 0.5rem); }
+  :where(.dw-stack-comfort) { --dw-stack-gap: var(--dw-space-4, 1rem); }
+  :where(.dw-stack-loose) { --dw-stack-gap: var(--dw-space-6, 2rem); }
+
+  :where(.dw-inline) {
+    display: flex;
+    align-items: center;
+    gap: var(--dw-inline-gap, var(--dw-space-3, 0.75rem));
+    flex-wrap: wrap;
+  }
+
+  :where(.dw-cluster) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--dw-cluster-gap, var(--dw-space-3, 0.75rem));
+  }
+
+  :where(.dw-split) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--dw-split-gap, var(--dw-space-4, 1rem));
+  }
+
+  :where(.dw-workspace-shell) {
+    display: grid;
+    grid-template-rows: auto auto minmax(20rem, 1fr) auto;
+    min-block-size: var(--dw-workspace-min-block, 34rem);
+    overflow: hidden;
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-3, 0.75rem);
+    background: var(--dw-color-surface);
+  }
+
+  :where(.dw-workspace-nav, .dw-workspace-tools, .dw-workspace-status) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--dw-space-2, 0.5rem);
+    padding: var(--dw-space-2, 0.5rem) var(--dw-space-3, 0.75rem);
+    background: var(--dw-color-surface-2);
+    border-block-end: var(--dw-border-width, 1px) solid var(--dw-color-border);
+  }
+
+  :where(.dw-workspace-tools) {
+    justify-content: space-between;
+  }
+
+  :where(.dw-workspace-status) {
+    justify-content: space-between;
+    border-block-start: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-block-end: 0;
+    color: var(--dw-color-text-muted);
+    font-size: var(--dw-text-1, 0.875rem);
+  }
+
+  :where(.dw-workspace-body) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(var(--dw-workspace-rail-width, 8.5rem), auto);
+    min-block-size: 0;
+  }
+
+  :where(.dw-workspace-content) {
+    min-width: 0;
+    padding: var(--dw-space-4, 1rem);
+    overflow: auto;
+  }
+
+  :where(.dw-workspace-actions) {
+    display: grid;
+    align-content: start;
+    gap: var(--dw-space-2, 0.5rem);
+    padding: var(--dw-space-3, 0.75rem);
+    border-inline-start: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    background: color-mix(in srgb, var(--dw-color-surface-2) 76%, transparent);
+  }
+
+  :where(.dw-workspace-nav-item, .dw-workspace-tool-item) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 2rem;
+    padding-inline: var(--dw-space-3, 0.75rem);
+    border: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    border-radius: var(--dw-radius-1, 0.375rem);
+    background: var(--dw-color-surface);
+    color: var(--dw-color-text);
+    text-decoration: none;
+    font-size: var(--dw-text-1, 0.875rem);
+  }
+
+  :where(.dw-workspace-nav-item.is-active, .dw-workspace-tool-item.is-active) {
+    background: var(--dw-color-accent);
+    border-color: var(--dw-color-accent);
+    color: var(--dw-color-on-accent);
+  }
+
+  @media (max-width: 64rem) {
+    :where(.dw-workspace-body) {
+      grid-template-columns: 1fr;
+    }
+
+    :where(.dw-workspace-actions) {
+      grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+      border-inline-start: 0;
+      border-block-start: var(--dw-border-width, 1px) solid var(--dw-color-border);
+    }
+  }
+
+  :where(.dw-grid) {
+    --dw-cols: 1;
+    --dw-grid-gap: var(--dw-space-4, 1rem);
+    display: grid;
+    grid-template-columns: repeat(var(--dw-cols), minmax(0, 1fr));
+    gap: var(--dw-grid-gap);
+  }
+
+  :where(.dw-repeat) {
+    --dw-repeat-min: 16rem;
+    --dw-repeat-gap: var(--dw-grid-gap, var(--dw-space-4, 1rem));
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--dw-repeat-min)), 1fr));
+    gap: var(--dw-repeat-gap);
+  }
+
+  :where(.dw-repeat-sm) { --dw-repeat-min: 12rem; }
+  :where(.dw-repeat-md) { --dw-repeat-min: 16rem; }
+  :where(.dw-repeat-lg) { --dw-repeat-min: 20rem; }
+  :where(.dw-repeat-xl) { --dw-repeat-min: 24rem; }
+
+  :where(.dw-grid-dense) {
+    grid-auto-flow: dense;
+  }
+
+  :where(.dw-grid-rows-compact) {
+    grid-auto-rows: minmax(5rem, auto);
+  }
+
+  :where(.dw-grid-debug) {
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--dw-color-info) 36%, transparent) 0,
+        color-mix(in srgb, var(--dw-color-info) 36%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: calc((100% + var(--dw-grid-gap, 0px)) / var(--dw-cols, 24)) 100%;
+  }
+
+  :where(.dw-span-full) {
+    grid-column: 1 / -1;
+  }
+
+  :where(.dw-hidden) {
+    display: none !important;
+  }
+
+  :where(.dw-block) {
+    display: block;
+  }
+
+  :where(.dw-inline-flex) {
+    display: inline-flex;
+  }
+
+  :where(.dw-text-left) {
+    text-align: left;
+  }
+
+  :where(.dw-text-center) {
+    text-align: center;
+  }
+
+  :where(.dw-text-right) {
+    text-align: right;
+  }
+
+  :where(.dw-text-muted) {
+    color: var(--dw-color-text-muted);
+  }
+
+  :where(.dw-center) {
+    margin-inline: auto;
+  }
+
+  :where(.dw-gap-0) { --dw-grid-gap: var(--dw-space-0, 0); gap: var(--dw-space-0, 0); }
+  :where(.dw-gap-1) { --dw-grid-gap: var(--dw-space-1, 0.25rem); gap: var(--dw-space-1, 0.25rem); }
+  :where(.dw-gap-2) { --dw-grid-gap: var(--dw-space-2, 0.5rem); gap: var(--dw-space-2, 0.5rem); }
+  :where(.dw-gap-3) { --dw-grid-gap: var(--dw-space-3, 0.75rem); gap: var(--dw-space-3, 0.75rem); }
+  :where(.dw-gap-4) { --dw-grid-gap: var(--dw-space-4, 1rem); gap: var(--dw-space-4, 1rem); }
+  :where(.dw-gap-5) { --dw-grid-gap: var(--dw-space-5, 1.5rem); gap: var(--dw-space-5, 1.5rem); }
+  :where(.dw-gap-6) { --dw-grid-gap: var(--dw-space-6, 2rem); gap: var(--dw-space-6, 2rem); }
+  :where(.dw-gap-7) { --dw-grid-gap: var(--dw-space-7, 3rem); gap: var(--dw-space-7, 3rem); }
+  :where(.dw-gap-8) { --dw-grid-gap: var(--dw-space-8, 4rem); gap: var(--dw-space-8, 4rem); }
+
+  :where(.dw-col-gap-0) { column-gap: var(--dw-space-0, 0); }
+  :where(.dw-col-gap-1) { column-gap: var(--dw-space-1, 0.25rem); }
+  :where(.dw-col-gap-2) { column-gap: var(--dw-space-2, 0.5rem); }
+  :where(.dw-col-gap-3) { column-gap: var(--dw-space-3, 0.75rem); }
+  :where(.dw-col-gap-4) { column-gap: var(--dw-space-4, 1rem); }
+  :where(.dw-col-gap-5) { column-gap: var(--dw-space-5, 1.5rem); }
+  :where(.dw-col-gap-6) { column-gap: var(--dw-space-6, 2rem); }
+  :where(.dw-col-gap-7) { column-gap: var(--dw-space-7, 3rem); }
+  :where(.dw-col-gap-8) { column-gap: var(--dw-space-8, 4rem); }
+
+  :where(.dw-row-gap-0) { row-gap: var(--dw-space-0, 0); }
+  :where(.dw-row-gap-1) { row-gap: var(--dw-space-1, 0.25rem); }
+  :where(.dw-row-gap-2) { row-gap: var(--dw-space-2, 0.5rem); }
+  :where(.dw-row-gap-3) { row-gap: var(--dw-space-3, 0.75rem); }
+  :where(.dw-row-gap-4) { row-gap: var(--dw-space-4, 1rem); }
+  :where(.dw-row-gap-5) { row-gap: var(--dw-space-5, 1.5rem); }
+  :where(.dw-row-gap-6) { row-gap: var(--dw-space-6, 2rem); }
+  :where(.dw-row-gap-7) { row-gap: var(--dw-space-7, 3rem); }
+  :where(.dw-row-gap-8) { row-gap: var(--dw-space-8, 4rem); }
+
+  :where(.dw-items-start) { align-items: start; }
+  :where(.dw-items-center) { align-items: center; }
+  :where(.dw-items-end) { align-items: end; }
+  :where(.dw-items-stretch) { align-items: stretch; }
+
+  :where(.dw-justify-start) { justify-items: start; }
+  :where(.dw-justify-center) { justify-items: center; }
+  :where(.dw-justify-end) { justify-items: end; }
+  :where(.dw-justify-stretch) { justify-items: stretch; }
+
+  :where(.dw-place-start) { place-items: start; }
+  :where(.dw-place-center) { place-items: center; }
+  :where(.dw-place-end) { place-items: end; }
+  :where(.dw-place-stretch) { place-items: stretch; }
+
+  :where(.dw-pad-0) { padding: var(--dw-space-0, 0); }
+  :where(.dw-pad-1) { padding: var(--dw-space-1, 0.25rem); }
+  :where(.dw-pad-2) { padding: var(--dw-space-2, 0.5rem); }
+  :where(.dw-pad-3) { padding: var(--dw-space-3, 0.75rem); }
+  :where(.dw-pad-4) { padding: var(--dw-space-4, 1rem); }
+  :where(.dw-pad-5) { padding: var(--dw-space-5, 1.5rem); }
+  :where(.dw-pad-6) { padding: var(--dw-space-6, 2rem); }
+  :where(.dw-pad-7) { padding: var(--dw-space-7, 3rem); }
+  :where(.dw-pad-8) { padding: var(--dw-space-8, 4rem); }
+
+  :where(.dw-radius-1) { border-radius: var(--dw-radius-1, 0.375rem); }
+  :where(.dw-radius-2) { border-radius: var(--dw-radius-2, 0.5rem); }
+  :where(.dw-radius-3) { border-radius: var(--dw-radius-3, 0.75rem); }
+  :where(.dw-radius-4) { border-radius: var(--dw-radius-4, 1rem); }
+  :where(.dw-shadow-1) { box-shadow: var(--dw-shadow-1); }
+  :where(.dw-shadow-2) { box-shadow: var(--dw-shadow-2); }
+
+  :where(.dw-cols-1) { --dw-cols: 1; }
+  :where(.dw-cols-2) { --dw-cols: 2; }
+  :where(.dw-cols-3) { --dw-cols: 3; }
+  :where(.dw-cols-4) { --dw-cols: 4; }
+  :where(.dw-cols-5) { --dw-cols: 5; }
+  :where(.dw-cols-6) { --dw-cols: 6; }
+  :where(.dw-cols-7) { --dw-cols: 7; }
+  :where(.dw-cols-8) { --dw-cols: 8; }
+  :where(.dw-cols-9) { --dw-cols: 9; }
+  :where(.dw-cols-10) { --dw-cols: 10; }
+  :where(.dw-cols-11) { --dw-cols: 11; }
+  :where(.dw-cols-12) { --dw-cols: 12; }
+  :where(.dw-cols-13) { --dw-cols: 13; }
+  :where(.dw-cols-14) { --dw-cols: 14; }
+  :where(.dw-cols-15) { --dw-cols: 15; }
+  :where(.dw-cols-16) { --dw-cols: 16; }
+  :where(.dw-cols-17) { --dw-cols: 17; }
+  :where(.dw-cols-18) { --dw-cols: 18; }
+  :where(.dw-cols-19) { --dw-cols: 19; }
+  :where(.dw-cols-20) { --dw-cols: 20; }
+  :where(.dw-cols-21) { --dw-cols: 21; }
+  :where(.dw-cols-22) { --dw-cols: 22; }
+  :where(.dw-cols-23) { --dw-cols: 23; }
+  :where(.dw-cols-24) { --dw-cols: 24; }
+
+  :where(.dw-span-1) { grid-column: span 1 / span 1; }
+  :where(.dw-span-2) { grid-column: span 2 / span 2; }
+  :where(.dw-span-3) { grid-column: span 3 / span 3; }
+  :where(.dw-span-4) { grid-column: span 4 / span 4; }
+  :where(.dw-span-5) { grid-column: span 5 / span 5; }
+  :where(.dw-span-6) { grid-column: span 6 / span 6; }
+  :where(.dw-span-7) { grid-column: span 7 / span 7; }
+  :where(.dw-span-8) { grid-column: span 8 / span 8; }
+  :where(.dw-span-9) { grid-column: span 9 / span 9; }
+  :where(.dw-span-10) { grid-column: span 10 / span 10; }
+  :where(.dw-span-11) { grid-column: span 11 / span 11; }
+  :where(.dw-span-12) { grid-column: span 12 / span 12; }
+  :where(.dw-span-13) { grid-column: span 13 / span 13; }
+  :where(.dw-span-14) { grid-column: span 14 / span 14; }
+  :where(.dw-span-15) { grid-column: span 15 / span 15; }
+  :where(.dw-span-16) { grid-column: span 16 / span 16; }
+  :where(.dw-span-17) { grid-column: span 17 / span 17; }
+  :where(.dw-span-18) { grid-column: span 18 / span 18; }
+  :where(.dw-span-19) { grid-column: span 19 / span 19; }
+  :where(.dw-span-20) { grid-column: span 20 / span 20; }
+  :where(.dw-span-21) { grid-column: span 21 / span 21; }
+  :where(.dw-span-22) { grid-column: span 22 / span 22; }
+  :where(.dw-span-23) { grid-column: span 23 / span 23; }
+  :where(.dw-span-24) { grid-column: span 24 / span 24; }
+
+  :where(.dw-start-1) { grid-column-start: 1; }
+  :where(.dw-start-2) { grid-column-start: 2; }
+  :where(.dw-start-3) { grid-column-start: 3; }
+  :where(.dw-start-4) { grid-column-start: 4; }
+  :where(.dw-start-5) { grid-column-start: 5; }
+  :where(.dw-start-6) { grid-column-start: 6; }
+  :where(.dw-start-7) { grid-column-start: 7; }
+  :where(.dw-start-8) { grid-column-start: 8; }
+  :where(.dw-start-9) { grid-column-start: 9; }
+  :where(.dw-start-10) { grid-column-start: 10; }
+  :where(.dw-start-11) { grid-column-start: 11; }
+  :where(.dw-start-12) { grid-column-start: 12; }
+  :where(.dw-start-13) { grid-column-start: 13; }
+  :where(.dw-start-14) { grid-column-start: 14; }
+  :where(.dw-start-15) { grid-column-start: 15; }
+  :where(.dw-start-16) { grid-column-start: 16; }
+  :where(.dw-start-17) { grid-column-start: 17; }
+  :where(.dw-start-18) { grid-column-start: 18; }
+  :where(.dw-start-19) { grid-column-start: 19; }
+  :where(.dw-start-20) { grid-column-start: 20; }
+  :where(.dw-start-21) { grid-column-start: 21; }
+  :where(.dw-start-22) { grid-column-start: 22; }
+  :where(.dw-start-23) { grid-column-start: 23; }
+  :where(.dw-start-24) { grid-column-start: 24; }
+
+  :where(.dw-end-2) { grid-column-end: 2; }
+  :where(.dw-end-3) { grid-column-end: 3; }
+  :where(.dw-end-4) { grid-column-end: 4; }
+  :where(.dw-end-5) { grid-column-end: 5; }
+  :where(.dw-end-6) { grid-column-end: 6; }
+  :where(.dw-end-7) { grid-column-end: 7; }
+  :where(.dw-end-8) { grid-column-end: 8; }
+  :where(.dw-end-9) { grid-column-end: 9; }
+  :where(.dw-end-10) { grid-column-end: 10; }
+  :where(.dw-end-11) { grid-column-end: 11; }
+  :where(.dw-end-12) { grid-column-end: 12; }
+  :where(.dw-end-13) { grid-column-end: 13; }
+  :where(.dw-end-14) { grid-column-end: 14; }
+  :where(.dw-end-15) { grid-column-end: 15; }
+  :where(.dw-end-16) { grid-column-end: 16; }
+  :where(.dw-end-17) { grid-column-end: 17; }
+  :where(.dw-end-18) { grid-column-end: 18; }
+  :where(.dw-end-19) { grid-column-end: 19; }
+  :where(.dw-end-20) { grid-column-end: 20; }
+  :where(.dw-end-21) { grid-column-end: 21; }
+  :where(.dw-end-22) { grid-column-end: 22; }
+  :where(.dw-end-23) { grid-column-end: 23; }
+  :where(.dw-end-24) { grid-column-end: 24; }
+  :where(.dw-end-25) { grid-column-end: 25; }
+
+  :where(.dw-row-span-1) { grid-row: span 1 / span 1; }
+  :where(.dw-row-span-2) { grid-row: span 2 / span 2; }
+  :where(.dw-row-span-3) { grid-row: span 3 / span 3; }
+  :where(.dw-row-span-4) { grid-row: span 4 / span 4; }
+  :where(.dw-row-span-5) { grid-row: span 5 / span 5; }
+  :where(.dw-row-span-6) { grid-row: span 6 / span 6; }
+  :where(.dw-row-span-7) { grid-row: span 7 / span 7; }
+  :where(.dw-row-span-8) { grid-row: span 8 / span 8; }
+  :where(.dw-row-span-9) { grid-row: span 9 / span 9; }
+  :where(.dw-row-span-10) { grid-row: span 10 / span 10; }
+  :where(.dw-row-span-11) { grid-row: span 11 / span 11; }
+  :where(.dw-row-span-12) { grid-row: span 12 / span 12; }
+
+  :where(.dw-aspect) {
+    aspect-ratio: var(--dw-aspect-ratio, 16 / 9);
+  }
+
+  :where(.dw-aspect-auto) {
+    aspect-ratio: auto;
+  }
+
+  :where(.dw-aspect-auto-video) {
+    aspect-ratio: auto 16 / 9;
+  }
+
+  :where(.dw-aspect-math) {
+    aspect-ratio: calc(var(--dw-aspect-w, 16) / var(--dw-aspect-h, 9));
+  }
+
+  :where(.dw-aspect-square) {
+    aspect-ratio: 1 / 1;
+  }
+
+  :where(.dw-aspect-video) {
+    aspect-ratio: 16 / 9;
+  }
+
+  :where(.dw-aspect-photo) {
+    aspect-ratio: 4 / 3;
+  }
+
+  :where(.dw-aspect-wide) {
+    aspect-ratio: 21 / 9;
+  }
+
+  :where(.dw-aspect-cinema) {
+    aspect-ratio: 239 / 100;
+  }
+
+  :where(.dw-aspect-story) {
+    aspect-ratio: 9 / 16;
+  }
+
+  :where(.dw-aspect-portrait) {
+    aspect-ratio: 3 / 4;
+  }
+
+  :where(.dw-aspect-card) {
+    aspect-ratio: 5 / 4;
+  }
+
+  :where(.dw-clip) {
+    overflow: hidden;
+  }
+
+  :where(.dw-media-fill > :where(img, video, iframe, embed, object, canvas, svg)) {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  :where(.dw-media-fit > :where(img, video, iframe, embed, object, canvas, svg)) {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: contain;
+  }
+
+  :where(.dw-media-scale-down > :where(img, video, iframe, embed, object, canvas, svg)) {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: scale-down;
+  }
+
+  :where(.dw-media-pos-center > :where(img, video, canvas, svg)) {
+    object-position: center;
+  }
+
+  :where(.dw-media-pos-top > :where(img, video, canvas, svg)) {
+    object-position: top center;
+  }
+
+  :where(.dw-media-pos-right > :where(img, video, canvas, svg)) {
+    object-position: center right;
+  }
+
+  :where(.dw-media-pos-bottom > :where(img, video, canvas, svg)) {
+    object-position: bottom center;
+  }
+
+  :where(.dw-media-pos-left > :where(img, video, canvas, svg)) {
+    object-position: center left;
+  }
+
+
+  @media (min-width: 40rem) {
+    :where(.dw-sm-cols-1) { --dw-cols: 1; }
+    :where(.dw-sm-cols-2) { --dw-cols: 2; }
+    :where(.dw-sm-cols-3) { --dw-cols: 3; }
+    :where(.dw-sm-cols-4) { --dw-cols: 4; }
+    :where(.dw-sm-cols-5) { --dw-cols: 5; }
+    :where(.dw-sm-cols-6) { --dw-cols: 6; }
+    :where(.dw-sm-cols-7) { --dw-cols: 7; }
+    :where(.dw-sm-cols-8) { --dw-cols: 8; }
+    :where(.dw-sm-cols-9) { --dw-cols: 9; }
+    :where(.dw-sm-cols-10) { --dw-cols: 10; }
+    :where(.dw-sm-cols-11) { --dw-cols: 11; }
+    :where(.dw-sm-cols-12) { --dw-cols: 12; }
+    :where(.dw-sm-cols-13) { --dw-cols: 13; }
+    :where(.dw-sm-cols-14) { --dw-cols: 14; }
+    :where(.dw-sm-cols-15) { --dw-cols: 15; }
+    :where(.dw-sm-cols-16) { --dw-cols: 16; }
+    :where(.dw-sm-cols-17) { --dw-cols: 17; }
+    :where(.dw-sm-cols-18) { --dw-cols: 18; }
+    :where(.dw-sm-cols-19) { --dw-cols: 19; }
+    :where(.dw-sm-cols-20) { --dw-cols: 20; }
+    :where(.dw-sm-cols-21) { --dw-cols: 21; }
+    :where(.dw-sm-cols-22) { --dw-cols: 22; }
+    :where(.dw-sm-cols-23) { --dw-cols: 23; }
+    :where(.dw-sm-cols-24) { --dw-cols: 24; }
+
+    :where(.dw-sm-span-1) { grid-column: span 1 / span 1; }
+    :where(.dw-sm-span-2) { grid-column: span 2 / span 2; }
+    :where(.dw-sm-span-3) { grid-column: span 3 / span 3; }
+    :where(.dw-sm-span-4) { grid-column: span 4 / span 4; }
+    :where(.dw-sm-span-5) { grid-column: span 5 / span 5; }
+    :where(.dw-sm-span-6) { grid-column: span 6 / span 6; }
+    :where(.dw-sm-span-7) { grid-column: span 7 / span 7; }
+    :where(.dw-sm-span-8) { grid-column: span 8 / span 8; }
+    :where(.dw-sm-span-9) { grid-column: span 9 / span 9; }
+    :where(.dw-sm-span-10) { grid-column: span 10 / span 10; }
+    :where(.dw-sm-span-11) { grid-column: span 11 / span 11; }
+    :where(.dw-sm-span-12) { grid-column: span 12 / span 12; }
+    :where(.dw-sm-span-13) { grid-column: span 13 / span 13; }
+    :where(.dw-sm-span-14) { grid-column: span 14 / span 14; }
+    :where(.dw-sm-span-15) { grid-column: span 15 / span 15; }
+    :where(.dw-sm-span-16) { grid-column: span 16 / span 16; }
+    :where(.dw-sm-span-17) { grid-column: span 17 / span 17; }
+    :where(.dw-sm-span-18) { grid-column: span 18 / span 18; }
+    :where(.dw-sm-span-19) { grid-column: span 19 / span 19; }
+    :where(.dw-sm-span-20) { grid-column: span 20 / span 20; }
+    :where(.dw-sm-span-21) { grid-column: span 21 / span 21; }
+    :where(.dw-sm-span-22) { grid-column: span 22 / span 22; }
+    :where(.dw-sm-span-23) { grid-column: span 23 / span 23; }
+    :where(.dw-sm-span-24) { grid-column: span 24 / span 24; }
+
+    :where(.dw-sm-start-1) { grid-column-start: 1; }
+    :where(.dw-sm-start-2) { grid-column-start: 2; }
+    :where(.dw-sm-start-3) { grid-column-start: 3; }
+    :where(.dw-sm-start-4) { grid-column-start: 4; }
+    :where(.dw-sm-start-5) { grid-column-start: 5; }
+    :where(.dw-sm-start-6) { grid-column-start: 6; }
+    :where(.dw-sm-start-7) { grid-column-start: 7; }
+    :where(.dw-sm-start-8) { grid-column-start: 8; }
+    :where(.dw-sm-start-9) { grid-column-start: 9; }
+    :where(.dw-sm-start-10) { grid-column-start: 10; }
+    :where(.dw-sm-start-11) { grid-column-start: 11; }
+    :where(.dw-sm-start-12) { grid-column-start: 12; }
+    :where(.dw-sm-start-13) { grid-column-start: 13; }
+    :where(.dw-sm-start-14) { grid-column-start: 14; }
+    :where(.dw-sm-start-15) { grid-column-start: 15; }
+    :where(.dw-sm-start-16) { grid-column-start: 16; }
+    :where(.dw-sm-start-17) { grid-column-start: 17; }
+    :where(.dw-sm-start-18) { grid-column-start: 18; }
+    :where(.dw-sm-start-19) { grid-column-start: 19; }
+    :where(.dw-sm-start-20) { grid-column-start: 20; }
+    :where(.dw-sm-start-21) { grid-column-start: 21; }
+    :where(.dw-sm-start-22) { grid-column-start: 22; }
+    :where(.dw-sm-start-23) { grid-column-start: 23; }
+    :where(.dw-sm-start-24) { grid-column-start: 24; }
+  }
+
+  @media (min-width: 48rem) {
+    :where(.dw-md-cols-1) { --dw-cols: 1; }
+    :where(.dw-md-cols-2) { --dw-cols: 2; }
+    :where(.dw-md-cols-3) { --dw-cols: 3; }
+    :where(.dw-md-cols-4) { --dw-cols: 4; }
+    :where(.dw-md-cols-5) { --dw-cols: 5; }
+    :where(.dw-md-cols-6) { --dw-cols: 6; }
+    :where(.dw-md-cols-7) { --dw-cols: 7; }
+    :where(.dw-md-cols-8) { --dw-cols: 8; }
+    :where(.dw-md-cols-9) { --dw-cols: 9; }
+    :where(.dw-md-cols-10) { --dw-cols: 10; }
+    :where(.dw-md-cols-11) { --dw-cols: 11; }
+    :where(.dw-md-cols-12) { --dw-cols: 12; }
+    :where(.dw-md-cols-13) { --dw-cols: 13; }
+    :where(.dw-md-cols-14) { --dw-cols: 14; }
+    :where(.dw-md-cols-15) { --dw-cols: 15; }
+    :where(.dw-md-cols-16) { --dw-cols: 16; }
+    :where(.dw-md-cols-17) { --dw-cols: 17; }
+    :where(.dw-md-cols-18) { --dw-cols: 18; }
+    :where(.dw-md-cols-19) { --dw-cols: 19; }
+    :where(.dw-md-cols-20) { --dw-cols: 20; }
+    :where(.dw-md-cols-21) { --dw-cols: 21; }
+    :where(.dw-md-cols-22) { --dw-cols: 22; }
+    :where(.dw-md-cols-23) { --dw-cols: 23; }
+    :where(.dw-md-cols-24) { --dw-cols: 24; }
+
+    :where(.dw-md-span-1) { grid-column: span 1 / span 1; }
+    :where(.dw-md-span-2) { grid-column: span 2 / span 2; }
+    :where(.dw-md-span-3) { grid-column: span 3 / span 3; }
+    :where(.dw-md-span-4) { grid-column: span 4 / span 4; }
+    :where(.dw-md-span-5) { grid-column: span 5 / span 5; }
+    :where(.dw-md-span-6) { grid-column: span 6 / span 6; }
+    :where(.dw-md-span-7) { grid-column: span 7 / span 7; }
+    :where(.dw-md-span-8) { grid-column: span 8 / span 8; }
+    :where(.dw-md-span-9) { grid-column: span 9 / span 9; }
+    :where(.dw-md-span-10) { grid-column: span 10 / span 10; }
+    :where(.dw-md-span-11) { grid-column: span 11 / span 11; }
+    :where(.dw-md-span-12) { grid-column: span 12 / span 12; }
+    :where(.dw-md-span-13) { grid-column: span 13 / span 13; }
+    :where(.dw-md-span-14) { grid-column: span 14 / span 14; }
+    :where(.dw-md-span-15) { grid-column: span 15 / span 15; }
+    :where(.dw-md-span-16) { grid-column: span 16 / span 16; }
+    :where(.dw-md-span-17) { grid-column: span 17 / span 17; }
+    :where(.dw-md-span-18) { grid-column: span 18 / span 18; }
+    :where(.dw-md-span-19) { grid-column: span 19 / span 19; }
+    :where(.dw-md-span-20) { grid-column: span 20 / span 20; }
+    :where(.dw-md-span-21) { grid-column: span 21 / span 21; }
+    :where(.dw-md-span-22) { grid-column: span 22 / span 22; }
+    :where(.dw-md-span-23) { grid-column: span 23 / span 23; }
+    :where(.dw-md-span-24) { grid-column: span 24 / span 24; }
+
+    :where(.dw-md-start-1) { grid-column-start: 1; }
+    :where(.dw-md-start-2) { grid-column-start: 2; }
+    :where(.dw-md-start-3) { grid-column-start: 3; }
+    :where(.dw-md-start-4) { grid-column-start: 4; }
+    :where(.dw-md-start-5) { grid-column-start: 5; }
+    :where(.dw-md-start-6) { grid-column-start: 6; }
+    :where(.dw-md-start-7) { grid-column-start: 7; }
+    :where(.dw-md-start-8) { grid-column-start: 8; }
+    :where(.dw-md-start-9) { grid-column-start: 9; }
+    :where(.dw-md-start-10) { grid-column-start: 10; }
+    :where(.dw-md-start-11) { grid-column-start: 11; }
+    :where(.dw-md-start-12) { grid-column-start: 12; }
+    :where(.dw-md-start-13) { grid-column-start: 13; }
+    :where(.dw-md-start-14) { grid-column-start: 14; }
+    :where(.dw-md-start-15) { grid-column-start: 15; }
+    :where(.dw-md-start-16) { grid-column-start: 16; }
+    :where(.dw-md-start-17) { grid-column-start: 17; }
+    :where(.dw-md-start-18) { grid-column-start: 18; }
+    :where(.dw-md-start-19) { grid-column-start: 19; }
+    :where(.dw-md-start-20) { grid-column-start: 20; }
+    :where(.dw-md-start-21) { grid-column-start: 21; }
+    :where(.dw-md-start-22) { grid-column-start: 22; }
+    :where(.dw-md-start-23) { grid-column-start: 23; }
+    :where(.dw-md-start-24) { grid-column-start: 24; }
+  }
+
+  @media (min-width: 64rem) {
+    :where(.dw-lg-cols-1) { --dw-cols: 1; }
+    :where(.dw-lg-cols-2) { --dw-cols: 2; }
+    :where(.dw-lg-cols-3) { --dw-cols: 3; }
+    :where(.dw-lg-cols-4) { --dw-cols: 4; }
+    :where(.dw-lg-cols-5) { --dw-cols: 5; }
+    :where(.dw-lg-cols-6) { --dw-cols: 6; }
+    :where(.dw-lg-cols-7) { --dw-cols: 7; }
+    :where(.dw-lg-cols-8) { --dw-cols: 8; }
+    :where(.dw-lg-cols-9) { --dw-cols: 9; }
+    :where(.dw-lg-cols-10) { --dw-cols: 10; }
+    :where(.dw-lg-cols-11) { --dw-cols: 11; }
+    :where(.dw-lg-cols-12) { --dw-cols: 12; }
+    :where(.dw-lg-cols-13) { --dw-cols: 13; }
+    :where(.dw-lg-cols-14) { --dw-cols: 14; }
+    :where(.dw-lg-cols-15) { --dw-cols: 15; }
+    :where(.dw-lg-cols-16) { --dw-cols: 16; }
+    :where(.dw-lg-cols-17) { --dw-cols: 17; }
+    :where(.dw-lg-cols-18) { --dw-cols: 18; }
+    :where(.dw-lg-cols-19) { --dw-cols: 19; }
+    :where(.dw-lg-cols-20) { --dw-cols: 20; }
+    :where(.dw-lg-cols-21) { --dw-cols: 21; }
+    :where(.dw-lg-cols-22) { --dw-cols: 22; }
+    :where(.dw-lg-cols-23) { --dw-cols: 23; }
+    :where(.dw-lg-cols-24) { --dw-cols: 24; }
+
+    :where(.dw-lg-span-1) { grid-column: span 1 / span 1; }
+    :where(.dw-lg-span-2) { grid-column: span 2 / span 2; }
+    :where(.dw-lg-span-3) { grid-column: span 3 / span 3; }
+    :where(.dw-lg-span-4) { grid-column: span 4 / span 4; }
+    :where(.dw-lg-span-5) { grid-column: span 5 / span 5; }
+    :where(.dw-lg-span-6) { grid-column: span 6 / span 6; }
+    :where(.dw-lg-span-7) { grid-column: span 7 / span 7; }
+    :where(.dw-lg-span-8) { grid-column: span 8 / span 8; }
+    :where(.dw-lg-span-9) { grid-column: span 9 / span 9; }
+    :where(.dw-lg-span-10) { grid-column: span 10 / span 10; }
+    :where(.dw-lg-span-11) { grid-column: span 11 / span 11; }
+    :where(.dw-lg-span-12) { grid-column: span 12 / span 12; }
+    :where(.dw-lg-span-13) { grid-column: span 13 / span 13; }
+    :where(.dw-lg-span-14) { grid-column: span 14 / span 14; }
+    :where(.dw-lg-span-15) { grid-column: span 15 / span 15; }
+    :where(.dw-lg-span-16) { grid-column: span 16 / span 16; }
+    :where(.dw-lg-span-17) { grid-column: span 17 / span 17; }
+    :where(.dw-lg-span-18) { grid-column: span 18 / span 18; }
+    :where(.dw-lg-span-19) { grid-column: span 19 / span 19; }
+    :where(.dw-lg-span-20) { grid-column: span 20 / span 20; }
+    :where(.dw-lg-span-21) { grid-column: span 21 / span 21; }
+    :where(.dw-lg-span-22) { grid-column: span 22 / span 22; }
+    :where(.dw-lg-span-23) { grid-column: span 23 / span 23; }
+    :where(.dw-lg-span-24) { grid-column: span 24 / span 24; }
+
+    :where(.dw-lg-start-1) { grid-column-start: 1; }
+    :where(.dw-lg-start-2) { grid-column-start: 2; }
+    :where(.dw-lg-start-3) { grid-column-start: 3; }
+    :where(.dw-lg-start-4) { grid-column-start: 4; }
+    :where(.dw-lg-start-5) { grid-column-start: 5; }
+    :where(.dw-lg-start-6) { grid-column-start: 6; }
+    :where(.dw-lg-start-7) { grid-column-start: 7; }
+    :where(.dw-lg-start-8) { grid-column-start: 8; }
+    :where(.dw-lg-start-9) { grid-column-start: 9; }
+    :where(.dw-lg-start-10) { grid-column-start: 10; }
+    :where(.dw-lg-start-11) { grid-column-start: 11; }
+    :where(.dw-lg-start-12) { grid-column-start: 12; }
+    :where(.dw-lg-start-13) { grid-column-start: 13; }
+    :where(.dw-lg-start-14) { grid-column-start: 14; }
+    :where(.dw-lg-start-15) { grid-column-start: 15; }
+    :where(.dw-lg-start-16) { grid-column-start: 16; }
+    :where(.dw-lg-start-17) { grid-column-start: 17; }
+    :where(.dw-lg-start-18) { grid-column-start: 18; }
+    :where(.dw-lg-start-19) { grid-column-start: 19; }
+    :where(.dw-lg-start-20) { grid-column-start: 20; }
+    :where(.dw-lg-start-21) { grid-column-start: 21; }
+    :where(.dw-lg-start-22) { grid-column-start: 22; }
+    :where(.dw-lg-start-23) { grid-column-start: 23; }
+    :where(.dw-lg-start-24) { grid-column-start: 24; }
+  }
+
+  @media (min-width: 80rem) {
+    :where(.dw-xl-cols-1) { --dw-cols: 1; }
+    :where(.dw-xl-cols-2) { --dw-cols: 2; }
+    :where(.dw-xl-cols-3) { --dw-cols: 3; }
+    :where(.dw-xl-cols-4) { --dw-cols: 4; }
+    :where(.dw-xl-cols-5) { --dw-cols: 5; }
+    :where(.dw-xl-cols-6) { --dw-cols: 6; }
+    :where(.dw-xl-cols-7) { --dw-cols: 7; }
+    :where(.dw-xl-cols-8) { --dw-cols: 8; }
+    :where(.dw-xl-cols-9) { --dw-cols: 9; }
+    :where(.dw-xl-cols-10) { --dw-cols: 10; }
+    :where(.dw-xl-cols-11) { --dw-cols: 11; }
+    :where(.dw-xl-cols-12) { --dw-cols: 12; }
+    :where(.dw-xl-cols-13) { --dw-cols: 13; }
+    :where(.dw-xl-cols-14) { --dw-cols: 14; }
+    :where(.dw-xl-cols-15) { --dw-cols: 15; }
+    :where(.dw-xl-cols-16) { --dw-cols: 16; }
+    :where(.dw-xl-cols-17) { --dw-cols: 17; }
+    :where(.dw-xl-cols-18) { --dw-cols: 18; }
+    :where(.dw-xl-cols-19) { --dw-cols: 19; }
+    :where(.dw-xl-cols-20) { --dw-cols: 20; }
+    :where(.dw-xl-cols-21) { --dw-cols: 21; }
+    :where(.dw-xl-cols-22) { --dw-cols: 22; }
+    :where(.dw-xl-cols-23) { --dw-cols: 23; }
+    :where(.dw-xl-cols-24) { --dw-cols: 24; }
+
+    :where(.dw-xl-span-1) { grid-column: span 1 / span 1; }
+    :where(.dw-xl-span-2) { grid-column: span 2 / span 2; }
+    :where(.dw-xl-span-3) { grid-column: span 3 / span 3; }
+    :where(.dw-xl-span-4) { grid-column: span 4 / span 4; }
+    :where(.dw-xl-span-5) { grid-column: span 5 / span 5; }
+    :where(.dw-xl-span-6) { grid-column: span 6 / span 6; }
+    :where(.dw-xl-span-7) { grid-column: span 7 / span 7; }
+    :where(.dw-xl-span-8) { grid-column: span 8 / span 8; }
+    :where(.dw-xl-span-9) { grid-column: span 9 / span 9; }
+    :where(.dw-xl-span-10) { grid-column: span 10 / span 10; }
+    :where(.dw-xl-span-11) { grid-column: span 11 / span 11; }
+    :where(.dw-xl-span-12) { grid-column: span 12 / span 12; }
+    :where(.dw-xl-span-13) { grid-column: span 13 / span 13; }
+    :where(.dw-xl-span-14) { grid-column: span 14 / span 14; }
+    :where(.dw-xl-span-15) { grid-column: span 15 / span 15; }
+    :where(.dw-xl-span-16) { grid-column: span 16 / span 16; }
+    :where(.dw-xl-span-17) { grid-column: span 17 / span 17; }
+    :where(.dw-xl-span-18) { grid-column: span 18 / span 18; }
+    :where(.dw-xl-span-19) { grid-column: span 19 / span 19; }
+    :where(.dw-xl-span-20) { grid-column: span 20 / span 20; }
+    :where(.dw-xl-span-21) { grid-column: span 21 / span 21; }
+    :where(.dw-xl-span-22) { grid-column: span 22 / span 22; }
+    :where(.dw-xl-span-23) { grid-column: span 23 / span 23; }
+    :where(.dw-xl-span-24) { grid-column: span 24 / span 24; }
+
+    :where(.dw-xl-start-1) { grid-column-start: 1; }
+    :where(.dw-xl-start-2) { grid-column-start: 2; }
+    :where(.dw-xl-start-3) { grid-column-start: 3; }
+    :where(.dw-xl-start-4) { grid-column-start: 4; }
+    :where(.dw-xl-start-5) { grid-column-start: 5; }
+    :where(.dw-xl-start-6) { grid-column-start: 6; }
+    :where(.dw-xl-start-7) { grid-column-start: 7; }
+    :where(.dw-xl-start-8) { grid-column-start: 8; }
+    :where(.dw-xl-start-9) { grid-column-start: 9; }
+    :where(.dw-xl-start-10) { grid-column-start: 10; }
+    :where(.dw-xl-start-11) { grid-column-start: 11; }
+    :where(.dw-xl-start-12) { grid-column-start: 12; }
+    :where(.dw-xl-start-13) { grid-column-start: 13; }
+    :where(.dw-xl-start-14) { grid-column-start: 14; }
+    :where(.dw-xl-start-15) { grid-column-start: 15; }
+    :where(.dw-xl-start-16) { grid-column-start: 16; }
+    :where(.dw-xl-start-17) { grid-column-start: 17; }
+    :where(.dw-xl-start-18) { grid-column-start: 18; }
+    :where(.dw-xl-start-19) { grid-column-start: 19; }
+    :where(.dw-xl-start-20) { grid-column-start: 20; }
+    :where(.dw-xl-start-21) { grid-column-start: 21; }
+    :where(.dw-xl-start-22) { grid-column-start: 22; }
+    :where(.dw-xl-start-23) { grid-column-start: 23; }
+    :where(.dw-xl-start-24) { grid-column-start: 24; }
+  }
+}
